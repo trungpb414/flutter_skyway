@@ -1,4 +1,4 @@
-// // ignore_for_file: lowerCamelCase
+// ignore_for_file: constant_identifier_names
 import 'package:flutter_skyway/presentation/app/app.binding.dart';
 import 'package:flutter_skyway/presentation/app/app.view.dart';
 import 'package:flutter_skyway/presentation/home/home.binding.dart';

@@ -11,6 +11,7 @@ abstract class _HomeViewModel extends BaseViewModel with Store {
   @override
   void onInit() {
     super.onInit();
+    value = 1;
   }
 
   @action increment() => value += 1;

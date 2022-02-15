@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_skyway/generated/assets.gen.dart';
 import 'package:flutter_skyway/presentation/app/app.viewmodel.dart';
 import 'package:flutter_skyway/core/base.dart';
 

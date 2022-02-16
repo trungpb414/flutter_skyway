@@ -15,6 +15,13 @@ dependencies:
   get: ^4.6.1
   flutter_screenutil: ^5.2.0
   easy_localization: ^3.0.0
+  # For Networking
+  dio: ^4.0.4
+  retrofit: ^3.0.1+1
+  # For Model
+  freezed_annotation: ^1.1.0
+  json_serializable: ^6.1.4
+  pretty_dio_logger:
 
 dev_dependencies:
   flutter_test:
@@ -24,6 +31,7 @@ dev_dependencies:
   mobx_codegen:
   flutter_lints:
   flutter_gen_runner:
+  retrofit_generator:
 
 flutter_gen:
   output: lib/generated

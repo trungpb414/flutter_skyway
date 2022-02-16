@@ -1,4 +1,6 @@
 import 'package:flutter_skyway/core/base.dart';
+import 'package:flutter_skyway/data/api/news_data_source.dart';
+import 'package:flutter_skyway/data/repositories/user_repository.dart';
 import 'package:flutter_skyway/presentation/app/app.pages.dart';
 import 'package:get/get.dart';
 import 'package:mobx/mobx.dart';

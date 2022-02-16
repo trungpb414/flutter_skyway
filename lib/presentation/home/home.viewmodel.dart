@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_skyway/core/base.dart';
+import 'package:get/get.dart';
 import 'package:mobx/mobx.dart';
 
 import '../app/app.pages.dart';

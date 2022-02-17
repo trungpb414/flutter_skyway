@@ -14,7 +14,7 @@ abstract class _AppViewModel extends BaseViewModel with Store {
   void onInit() async {
     super.onInit();
     await Future.delayed(const Duration(seconds: 1), () async {
-      await Get.toNamed(Routes.HOME);
+      await Get.toNamed(Routes.GROUP_CHAT);
     });
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_skyway/core/architecture/base_view.dart';
+import 'package:flutter_skyway/core/architecture/base.view.dart';
 import 'package:flutter_skyway/presentation/group_chat/group_chat.viewmodel.dart';
 import 'package:flutter_skyway/presentation/group_chat/widgets/circle_avatar.dart';
 import 'package:flutter_skyway/presentation/group_chat/widgets/message_bubble.dart';

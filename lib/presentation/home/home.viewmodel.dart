@@ -17,41 +17,36 @@ abstract class _HomeViewModel extends BaseViewModel with Store {
   _HomeViewModel(this.useCase);
 
   @observable
-  String roomName = "";
+  var roomName = "";
 
   @observable
-  CallModeType callMode = CallModeType.sfu;
+  var callMode = CallModeType.sfu;
 
   final formKey = GlobalKey<FormState>();
+
   bool get isFormValid => formKey.currentState?.validate() ?? false;
 
   @override
   void onInit() async {
     super.onInit();
-    (await useCase.getUsers()).when(
-      success: print,
-      failure: print,
-    );
+    // (await useCase.getUsers()).when(
+    //   success: print,
+    //   failure: print,
+    // );
   }
 
   @action
   toHostVideoChat() {
-    if (isFormValid) {
-      Get.toNamed(Routes.VIDEO_CHAT);
-    }
+    if (isFormValid) Get.toNamed(Routes.VIDEO_CHAT);
   }
 
   @action
   toJoinVideoChat() {
-    if (isFormValid) {
-      Get.toNamed(Routes.VIDEO_CHAT);
-    }
+    if (isFormValid) Get.toNamed(Routes.VIDEO_CHAT);
   }
 
   @action
-  setCallModeType(CallModeType callModeType) {
-    callMode = callModeType;
-  }
+  setCallModeType(CallModeType callModeType) => callMode = callModeType;
 
   @action
   String? roomNameValidator(String? value) =>

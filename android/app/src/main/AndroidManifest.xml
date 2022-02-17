@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.flutter_skyway">
+    package="com.example.flutter_skyway"
+    android:installLocation="preferExternal"
+    >
    <application
         android:label="flutter_skyway"
         android:name="${applicationName}"

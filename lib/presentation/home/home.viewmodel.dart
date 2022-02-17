@@ -1,9 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_skyway/core/base.dart';
-import 'package:flutter_skyway/presentation/home/home.suc.dart';
 import 'package:mobx/mobx.dart';
+
+import '../app/app.pages.dart';
+import 'home.suc.dart';
 
 part 'home.viewmodel.g.dart';
 
+enum CallModeType { sfu, mesh }
 class HomeViewModel = _HomeViewModel with _$HomeViewModel;
 
 abstract class _HomeViewModel extends BaseViewModel with Store {
@@ -12,7 +16,13 @@ abstract class _HomeViewModel extends BaseViewModel with Store {
   _HomeViewModel(this.useCase);
 
   @observable
-  int value = 0;
+  String roomName = "";
+
+  @observable
+  CallModeType callMode = CallModeType.sfu;
+
+  final formKey = GlobalKey<FormState>();
+  bool get isFormValid => formKey.currentState?.validate() ?? false;
 
   @override
   void onInit() async {
@@ -24,5 +34,25 @@ abstract class _HomeViewModel extends BaseViewModel with Store {
   }
 
   @action
-  increment() => value += 1;
+  toHostVideoChat() {
+    if (isFormValid) {
+      Get.toNamed(Routes.VIDEO_CHAT);
+    }
+  }
+
+  @action
+  toJoinVideoChat() {
+    if (isFormValid) {
+      Get.toNamed(Routes.VIDEO_CHAT);
+    }
+  }
+
+  @action
+  setCallModeType(CallModeType callModeType) {
+    callMode = callModeType;
+  }
+
+  @action
+  String? roomNameValidator(String? value) =>
+      (value == null || value.isEmpty || value.length > 20) ? "Invalid" : null;
 }

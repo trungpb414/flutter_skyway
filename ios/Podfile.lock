@@ -1,11 +1,23 @@
 PODS:
   - Flutter (1.0.0)
+  - ObjectMapper (4.2.0)
   - shared_preferences_ios (0.0.1):
     - Flutter
+  - SkyWay (2.0.1)
+  - Then (2.7.0)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
+  - ObjectMapper
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
+  - SkyWay
+  - Then
+
+SPEC REPOS:
+  trunk:
+    - ObjectMapper
+    - SkyWay
+    - Then
 
 EXTERNAL SOURCES:
   Flutter:
@@ -15,8 +27,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  ObjectMapper: 1eb41f610210777375fa806bf161dc39fb832b81
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
+  SkyWay: 55922fd4e7ccc030e7c42a2ab630e41f63ddce1b
+  Then: acfe0be7e98221c6204e12f8161459606d5d822d
 
-PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+PODFILE CHECKSUM: 433e750d902acf7cb64395b1d6b928fcbd7573e6
 
 COCOAPODS: 1.11.2

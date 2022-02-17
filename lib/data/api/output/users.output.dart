@@ -1,8 +1,8 @@
-import 'package:flutter_skyway/domain/models/user.dart';
+import 'package:flutter_skyway/domain/entities/user.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'users_output.freezed.dart';
-part 'users_output.g.dart';
+part 'users.output.freezed.dart';
+part 'users.output.g.dart';
 
 @freezed
 abstract class GetUsersOutput with _$GetUsersOutput {

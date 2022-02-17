@@ -1,6 +1,6 @@
 import 'package:flutter_skyway/core/architecture/result.dart';
-import 'package:flutter_skyway/domain/models/user.dart';
-import 'package:flutter_skyway/domain/usecase/user.uc.dart';
+import 'package:flutter_skyway/domain/entities/user.dart';
+import 'package:flutter_skyway/domain/use_case/user.uc.dart';
 
 abstract class HomeSceneUseCaseType {
   Future<Result<List<User>>> getUsers();

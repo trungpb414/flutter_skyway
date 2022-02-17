@@ -101,6 +101,15 @@ class SkywayPeer {
     });
   }
 
+  Future<void> sendText(String room, String message) async {
+    print("sendText:room=$room");
+    return await channel.invokeMethod('sendText', {
+      'peerId': peerId,
+      'room': room,
+      "message": message,
+    });
+  }
+
   Future<void> switchCamera(CameraMode mode) async {
     print("switchCamera:");
     return await channel.invokeMethod('switchCamera', {
@@ -142,6 +151,9 @@ class SkywayPeer {
           break;
         case 'onLeave':
           onEvent(SkywayEvent.onLeave, args);
+          break;
+        case 'onMessageData':
+          onEvent(SkywayEvent.onMessageData, args);
           break;
         default:
           print('unknown event($_event),args=$args');

@@ -16,6 +16,7 @@ struct Argument: Mappable {
     var remotePeerId: String?
     var room: String?
     var mode: Int?
+    var message: String?
     
     init?(map: Map) {
         
@@ -30,5 +31,6 @@ struct Argument: Mappable {
         remotePeerId <- map["remotePeerId"]
         room <- map["room"]
         mode <- map["mode"]
+        message <- map["message"]
     }
 }

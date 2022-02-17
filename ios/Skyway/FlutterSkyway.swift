@@ -140,6 +140,14 @@ class FlutterSkyway {
         result("success")
     }
     
+    func sendText(_ arg: Argument, _ result: @escaping FlutterResult) {
+        guard let peerId = arg.peerId, let roomName = arg.room else { return }
+        guard let message = arg.message else { return }
+        guard let peer = getPeer(peerId) else { return }
+        peer.send(roomName: roomName, data: message as NSString)
+        result("success")
+    }
+    
     func switchCamera(_ arg: Argument, _ result: @escaping FlutterResult) {
         guard let peerId = arg.peerId, let mode = arg.mode else { return }
         guard let peer = getPeer(peerId) else { return }

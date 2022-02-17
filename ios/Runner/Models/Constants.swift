@@ -24,6 +24,7 @@ enum Method: String {
     case startRemoteStream
     case join
     case leave
+    case sendText
     case switchCamera
 }
 
@@ -38,6 +39,7 @@ enum SkywayEvent: String {
     case onCloseRoom
     case onJoin
     case onLeave
+    case onMessageData
     case onRelease
     case onError
 }

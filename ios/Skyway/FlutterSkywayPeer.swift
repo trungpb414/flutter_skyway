@@ -128,6 +128,11 @@ class FlutterSkywayPeer: NSObject {
         room.offAll()
     }
     
+    func send(roomName: String, data: NSObject) {
+        guard let room = room else { return }
+        room.send(data)
+    }
+    
     func setRoomCallback(_ room: SKWRoom) {
         room.on(.ROOM_EVENT_OPEN, callback:{ [weak self] (obj) -> Void in
             guard let self = self else { return }
@@ -138,6 +143,12 @@ class FlutterSkywayPeer: NSObject {
             guard let self = self else { return }
             guard let mediaStream = obj as? SKWMediaStream else { return }
             self.addRemoteStream(mediaStream)
+        })
+        room.on(.ROOM_EVENT_DATA, callback:{ [weak self] (obj) -> Void in
+            guard let self = self else { return }
+            guard let roomDataMessage = obj as? SKWRoomDataMessage else { return }
+            guard let message = roomDataMessage.data as? String else { return }
+            self.sendEvent(.onMessageData, params: ["senderPeerId": roomDataMessage.src, "message": message])
         })
         room.on(.ROOM_EVENT_PEER_JOIN, callback:{ [weak self] (obj) -> Void in
             guard let self = self else { return }
@@ -176,7 +187,7 @@ class FlutterSkywayPeer: NSObject {
         constraints.maxWidth = 1000
         constraints.maxHeight = 1000
         constraints.cameraPosition = .CAMERA_POSITION_FRONT
-
+        
         self.localVideoView = FlutterSkyway.getNativeStreamView(id: id)
         
         guard let localStream = SKWNavigator.getUserMedia(constraints), let videoView = localVideoView?.videoView else {

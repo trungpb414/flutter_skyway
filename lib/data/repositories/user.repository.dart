@@ -1,6 +1,6 @@
 import 'package:flutter_skyway/core/architecture/result.dart';
-import 'package:flutter_skyway/data/api/news_data_source.dart';
-import 'package:flutter_skyway/domain/models/user.dart';
+import 'package:flutter_skyway/data/api/data_source/news.ds.dart';
+import 'package:flutter_skyway/domain/entities/user.dart';
 import 'package:get/get.dart';
 
 class UserRepository {

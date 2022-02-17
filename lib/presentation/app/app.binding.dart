@@ -1,7 +1,6 @@
-import 'package:dio/dio.dart';
-import 'package:flutter_skyway/data/api/api_services.dart';
-import 'package:flutter_skyway/data/api/news_data_source.dart';
-import 'package:flutter_skyway/data/repositories/user_repository.dart';
+import 'package:flutter_skyway/data/api/api.services.dart';
+import 'package:flutter_skyway/data/api/data_source/news.ds.dart';
+import 'package:flutter_skyway/data/repositories/user.repository.dart';
 import 'package:flutter_skyway/presentation/app/app.viewmodel.dart';
 import 'package:get/get.dart';
 

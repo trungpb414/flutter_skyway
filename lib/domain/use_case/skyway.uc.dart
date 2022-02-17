@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter_skyway/domain/models/skyway_peer.dart';
+import 'package:flutter_skyway/domain/entities/skyway_peer.dart';
 import 'package:flutter_skyway/utils/constants.dart';
 
 class SkywayUseCase {

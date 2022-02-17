@@ -1,4 +1,5 @@
 import 'package:flutter_skyway/core/base.dart';
+import 'package:flutter_skyway/presentation/home/home.suc.dart';
 import 'package:mobx/mobx.dart';
 
 part 'home.viewmodel.g.dart';
@@ -6,13 +7,22 @@ part 'home.viewmodel.g.dart';
 class HomeViewModel = _HomeViewModel with _$HomeViewModel;
 
 abstract class _HomeViewModel extends BaseViewModel with Store {
-  @observable int value = 0;
+  HomeSceneUseCaseType useCase;
+
+  _HomeViewModel(this.useCase);
+
+  @observable
+  int value = 0;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    value = 1;
+    (await useCase.getUsers()).when(
+      success: print,
+      failure: print,
+    );
   }
 
-  @action increment() => value += 1;
+  @action
+  increment() => value += 1;
 }

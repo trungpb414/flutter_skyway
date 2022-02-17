@@ -4,6 +4,6 @@ import 'package:get/get.dart';
 class VideoChatBinding implements Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<VideoChatViewModel>(() => VideoChatViewModel());
+    Get.put<VideoChatViewModel>(VideoChatViewModel());
   }
 }

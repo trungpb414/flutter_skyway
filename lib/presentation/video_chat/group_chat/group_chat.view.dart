@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_skyway/core/architecture/base.view.dart';
-import 'package:flutter_skyway/presentation/group_chat/group_chat.viewmodel.dart';
-import 'package:flutter_skyway/presentation/group_chat/widgets/circle_avatar.dart';
-import 'package:flutter_skyway/presentation/group_chat/widgets/message_bubble.dart';
+import 'package:flutter_skyway/core/base.dart';
+import 'package:flutter_skyway/generated/assets.gen.dart';
+import 'package:flutter_skyway/presentation/video_chat/group_chat/group_chat.viewmodel.dart';
+import 'package:flutter_skyway/presentation/video_chat/group_chat/widgets/circle_avatar.dart';
+import 'package:flutter_skyway/presentation/video_chat/group_chat/widgets/message_bubble.dart';
 import 'package:intl/intl.dart';
 
 class GroupChatView extends BaseView<GroupChatViewModel> {
@@ -24,7 +26,7 @@ class GroupChatView extends BaseView<GroupChatViewModel> {
               style: TextStyle(fontSize: 17.sp, fontWeight: FontWeight.w500),
             ),
             Text(
-              '3 members',
+              '${viewModel.users.length} members',
               style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
             ),
           ],
@@ -33,7 +35,9 @@ class GroupChatView extends BaseView<GroupChatViewModel> {
         actions: [
           IconButton(
             icon: const Icon(Icons.more_vert_rounded),
-            onPressed: () {},
+            onPressed: () {
+              viewModel.showSetting(context);
+            },
           )
         ],
       ),
@@ -52,19 +56,19 @@ class GroupChatView extends BaseView<GroupChatViewModel> {
                     children: [
                       Positioned(
                         child: CircleThumbAvatar(
-                          avatar: viewModel.users[0].avatar ?? '',
+                          avatar: viewModel.users[2].picture,
                         ),
                         left: 50,
                       ),
                       Positioned(
                         child: CircleThumbAvatar(
-                          avatar: viewModel.users[1].avatar ?? '',
+                          avatar: viewModel.users[1].picture,
                         ),
                         left: 25,
                       ),
                       Positioned(
                         child: CircleThumbAvatar(
-                          avatar: viewModel.users[2].avatar ?? '',
+                          avatar: viewModel.users[0].picture,
                         ),
                       ),
                       Positioned(
@@ -98,7 +102,9 @@ class GroupChatView extends BaseView<GroupChatViewModel> {
                       width: 70,
                       height: 30,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          viewModel.backToVideo();
+                        },
                         child: const Text(
                           'Back',
                         ),
@@ -110,9 +116,9 @@ class GroupChatView extends BaseView<GroupChatViewModel> {
             ),
             Expanded(
               child: Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/Background.png'),
+                    image: Assets.images.background,
                     fit: BoxFit.cover,
                   ),
                 ),

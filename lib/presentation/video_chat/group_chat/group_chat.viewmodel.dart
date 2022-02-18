@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_skyway/presentation/group_chat/message_model.dart';
-import 'package:flutter_skyway/presentation/group_chat/user_model.dart';
+import 'package:flutter_skyway/domain/entities/user.dart';
+import 'package:flutter_skyway/presentation/video_chat/group_chat/message_model.dart';
+import 'package:flutter_skyway/presentation/video_chat/group_chat/widgets/end_call_aleartdialog.dart';
+import 'package:flutter_skyway/presentation/video_chat/group_chat/widgets/setting_bottomsheet.dart';
+import 'package:get/instance_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_skyway/core/base.dart';
+import 'package:get/get.dart';
 
 part 'group_chat.viewmodel.g.dart';
 
@@ -11,7 +15,7 @@ class GroupChatViewModel = _GroupChatViewModel with _$GroupChatViewModel;
 
 abstract class _GroupChatViewModel extends BaseViewModel with Store {
   @observable
-  List<UserModel> users = [];
+  List<User> users = [];
 
   @observable
   List<MessageModel> messages = [];
@@ -26,9 +30,21 @@ abstract class _GroupChatViewModel extends BaseViewModel with Store {
     messageController = TextEditingController();
 
     users = [
-      UserModel(id: 1, name: 'user1', avatar: 'assets/images/pic1.jpg'),
-      UserModel(id: 2, name: 'user2', avatar: 'assets/images/pic2.jpg'),
-      UserModel(id: 3, name: 'user3', avatar: 'assets/images/pic3.jpg'),
+      User(
+          id: '1',
+          firstName: 'Lan',
+          lastName: 'Tran',
+          picture: Assets.images.pic1.path),
+      User(
+          id: '2',
+          firstName: 'Hoa',
+          lastName: 'Nguyen',
+          picture: Assets.images.pic2.path),
+      User(
+          id: '3',
+          firstName: 'Hue',
+          lastName: 'Vo',
+          picture: Assets.images.pic3.path),
     ];
 
     messages = [
@@ -143,5 +159,24 @@ abstract class _GroupChatViewModel extends BaseViewModel with Store {
 
   String getCallTime() {
     return DateFormat('dd.MM.yyyy').format(DateTime.now());
+  }
+
+  void backToVideo() {
+    Get.back();
+  }
+
+  void showSetting(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      builder: (BuildContext context) {
+        return SettingBottomSheet(
+          onRecordSelected: () {},
+          onShareSelected: () {},
+        );
+      },
+    );
   }
 }

@@ -1,10 +1,10 @@
 // ignore_for_file: constant_identifier_names
 import 'package:flutter_skyway/presentation/app/app.binding.dart';
 import 'package:flutter_skyway/presentation/app/app.view.dart';
-import 'package:flutter_skyway/presentation/group_chat/group_chat.binding.dart';
-import 'package:flutter_skyway/presentation/group_chat/group_chat.view.dart';
 import 'package:flutter_skyway/presentation/home/home.binding.dart';
 import 'package:flutter_skyway/presentation/home/home.view.dart';
+import 'package:flutter_skyway/presentation/video_chat/group_chat/group_chat.binding.dart';
+import 'package:flutter_skyway/presentation/video_chat/group_chat/group_chat.view.dart';
 import 'package:flutter_skyway/presentation/video_chat/video_chat.binding.dart';
 import 'package:flutter_skyway/presentation/video_chat/video_chat.view.dart';
 import 'package:get/get.dart';

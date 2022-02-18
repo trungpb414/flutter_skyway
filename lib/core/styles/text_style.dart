@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_skyway/core/base.dart';
+import 'package:flutter_skyway/core/architecture/text.extension.dart';
+
+
+import '../../generated/fonts.gen.dart';
 
 extension BaseTextExtension on Text {
   Text defaultStyle() {
@@ -7,7 +10,7 @@ extension BaseTextExtension on Text {
         .fontFamily(FontFamily.roboto)
         .fontStyle(FontStyle.normal);
   }
-  
+
   Text messageStyle() {
     return fontSize(16).fontWeight(FontWeight.w400);
   }

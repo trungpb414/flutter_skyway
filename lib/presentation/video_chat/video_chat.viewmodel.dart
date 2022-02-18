@@ -1,10 +1,10 @@
-import 'package:flutter/services.dart';
-import 'package:flutter_skyway/domain/entities/skyway_peer.dart';
 import 'package:flutter_skyway/presentation/video_chat/video_chat.suc.dart';
-import 'package:flutter_skyway/utils/constants.dart';
 import 'package:get/get.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_skyway/core/base.dart';
+
+import '../../domain/entities/skyway_peer.dart';
+import '../../utils/constants.dart';
 
 part 'video_chat.viewmodel.g.dart';
 
@@ -26,6 +26,17 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
       Get.defaultDialog(title: "Error", middleText: e.toString());
     }
   }
+  @action
+  rotateCameraTrigger() {}
+
+  @action
+  toggleCameraTrigger() {}
+
+  @action
+  toggleMicTrigger() {}
+
+  @action
+  declineTrigger() {}
 
   @override
   void onClose() {

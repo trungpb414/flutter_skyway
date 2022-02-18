@@ -22,6 +22,8 @@ dependencies:
   freezed_annotation: ^1.1.0
   json_serializable: ^6.1.4
   pretty_dio_logger:
+  flutter_svg: ^1.0.3
+
 
 dev_dependencies:
   flutter_test:
@@ -33,9 +35,14 @@ dev_dependencies:
   flutter_gen_runner:
   retrofit_generator:
 
+
 flutter_gen:
   output: lib/generated
   line_length: 80
+  integrations:
+    flutter_svg: true
+    flare_flutter: true
+    rive: true
 
 flutter:
   uses-material-design: true

@@ -23,6 +23,7 @@ dependencies:
   json_serializable: ^6.1.4
   pretty_dio_logger:
   flutter_svg: ^1.0.3
+  permission_handler:
 
 
 dev_dependencies:

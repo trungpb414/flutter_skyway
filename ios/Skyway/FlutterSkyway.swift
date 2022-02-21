@@ -52,6 +52,8 @@ class FlutterSkyway {
             leave(argument, result)
         case .switchCamera:
             switchCamera(argument, result)
+        case .sendText:
+            sendText(argument, result)
         }
     }
     
@@ -96,6 +98,7 @@ class FlutterSkyway {
         guard let localVideoId = arg.localVideoId, let peerId = arg.peerId else { return }
         guard let peer = getPeer(peerId) else { return }
         peer.startLocalStream(localVideoId)
+        result("success")
     }
     
     func listAllPeers(_ arg: Argument, _ result: @escaping FlutterResult) {
@@ -116,6 +119,7 @@ class FlutterSkyway {
     func hangUp(_ arg: Argument, _ result: @escaping FlutterResult) {
         guard let peerId = arg.peerId, let peer = getPeer(peerId) else { return }
         peer.hangUp()
+        result("success")
     }
     
     func startRemoteStream(_ arg: Argument, _ result: @escaping FlutterResult) {

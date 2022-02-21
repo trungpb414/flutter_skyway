@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_skyway/presentation/app/app.pages.dart';
-import 'package:flutter_skyway/presentation/video_chat/group_chat/widgets/end_call_aleartdialog.dart';
-import 'package:flutter_skyway/presentation/video_chat/group_chat/widgets/setting_bottomsheet.dart';
+import 'package:flutter_skyway/core/base.dart';
 import 'package:flutter_skyway/presentation/video_chat/video_chat.suc.dart';
 import 'package:get/get.dart';
 import 'package:mobx/mobx.dart';
-import 'package:flutter_skyway/core/base.dart';
 
 import '../../domain/entities/skyway_peer.dart';
 import '../../utils/constants.dart';
+import '../app/app.pages.dart';
+import 'group_chat/widgets/end_call_aleartdialog.dart';
+import 'group_chat/widgets/setting_bottomsheet.dart';
 
 part 'video_chat.viewmodel.g.dart';
 
 class VideoChatViewModel = _VideoChatViewModel with _$VideoChatViewModel;
 
 abstract class _VideoChatViewModel extends BaseViewModel with Store {
+  @observable
+  int numberOfPeople = 1;
+
+  ObservableList<IncomingPeopleNotification> notifications = ObservableList();
+
   VideoChatSceneUseCaseType useCase;
 
   _VideoChatViewModel(this.useCase);
@@ -43,6 +48,21 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   @action
   declineTrigger(BuildContext context) {
     showAlertDialog(context);
+  }
+
+  @action
+  increaseNotification() async {
+    numberOfPeople = (numberOfPeople + 1) % 4 + 1;
+    notifications.add(
+      IncomingPeopleNotification(
+          circleImage: Assets.images.imgAvatarPlaceHolder.image(), name: "John ${notifications.length + 1}"),
+    );
+    await Future.delayed(
+      const Duration(seconds: 2),
+      () async {
+        notifications.removeAt(0);
+      },
+    );
   }
 
   @override
@@ -83,4 +103,11 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
               },
             ));
   }
+}
+
+class IncomingPeopleNotification {
+  final Widget circleImage;
+  final String name;
+
+  IncomingPeopleNotification({required this.circleImage, required this.name});
 }

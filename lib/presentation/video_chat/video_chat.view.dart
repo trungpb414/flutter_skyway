@@ -74,7 +74,7 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
-                          viewModel.showSetting(context);
+                          viewModel.showSetting();
                         },
                         child: Assets.images.icCircleBtnMore
                             .svg(height: 44, width: 44),
@@ -122,7 +122,7 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
                       ),
                       ImageButton(
                         onPressed: () {
-                          viewModel.declineTrigger(context);
+                          viewModel.declineTrigger();
                         },
                         child: Assets.images.icCircleBtnDecline.svg(
                           height: 58,

@@ -77,10 +77,9 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   toggleMicTrigger() {}
 
   @action
-  declineTrigger(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => EndCallDialog(
+  declineTrigger() {
+    Get.dialog(
+      EndCallDialog(
         onEndCall: () {
           peer?.disconnect();
           Get.back();
@@ -216,19 +215,16 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
     Get.toNamed(Routes.GROUP_CHAT);
   }
 
-  void showSetting(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-      builder: (BuildContext context) {
-        return SettingBottomSheet(
+  void showSetting() {
+    Get.bottomSheet(
+        SettingBottomSheet(
           onRecordSelected: () {},
           onShareSelected: () {},
-        );
-      },
-    );
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        backgroundColor: Colors.white);
   }
 }
 

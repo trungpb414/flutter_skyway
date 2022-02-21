@@ -165,18 +165,15 @@ abstract class _GroupChatViewModel extends BaseViewModel with Store {
     Get.back();
   }
 
-  void showSetting(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-      builder: (BuildContext context) {
-        return SettingBottomSheet(
+  void showSetting() {
+    Get.bottomSheet(
+        SettingBottomSheet(
           onRecordSelected: () {},
           onShareSelected: () {},
-        );
-      },
-    );
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        backgroundColor: Colors.white);
   }
 }

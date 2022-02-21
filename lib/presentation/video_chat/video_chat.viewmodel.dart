@@ -1,3 +1,7 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_skyway/presentation/app/app.pages.dart';
+import 'package:flutter_skyway/presentation/video_chat/group_chat/widgets/end_call_aleartdialog.dart';
+import 'package:flutter_skyway/presentation/video_chat/group_chat/widgets/setting_bottomsheet.dart';
 import 'package:flutter_skyway/presentation/video_chat/video_chat.suc.dart';
 import 'package:get/get.dart';
 import 'package:mobx/mobx.dart';
@@ -26,6 +30,7 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
       Get.defaultDialog(title: "Error", middleText: e.toString());
     }
   }
+
   @action
   rotateCameraTrigger() {}
 
@@ -36,7 +41,9 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   toggleMicTrigger() {}
 
   @action
-  declineTrigger() {}
+  declineTrigger(BuildContext context) {
+    showAlertDialog(context);
+  }
 
   @override
   void onClose() {
@@ -46,5 +53,34 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
 
   void _onSkywayEvent(SkywayEvent event, Map<dynamic, dynamic> args) {
     print(event);
+  }
+
+  void goToChat() {
+    Get.toNamed(Routes.GROUP_CHAT);
+  }
+
+  void showSetting(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      builder: (BuildContext context) {
+        return SettingBottomSheet(
+          onRecordSelected: () {},
+          onShareSelected: () {},
+        );
+      },
+    );
+  }
+
+  void showAlertDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => EndCallDialog(
+              onEndCall: () {
+                Get.back();
+              },
+            ));
   }
 }

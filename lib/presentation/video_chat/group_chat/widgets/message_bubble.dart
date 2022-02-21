@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_skyway/core/base.dart';
-import 'package:flutter_skyway/presentation/group_chat/message_model.dart';
-import 'package:flutter_skyway/presentation/group_chat/user_model.dart';
-import 'package:flutter_skyway/presentation/group_chat/widgets/circle_avatar.dart';
+import 'package:flutter_skyway/domain/entities/user.dart';
+import 'package:flutter_skyway/presentation/video_chat/group_chat/message_model.dart';
 import 'package:intl/intl.dart';
+
+import 'circle_avatar.dart';
 
 class SentBubleMessage extends StatelessWidget {
   const SentBubleMessage(
@@ -16,7 +17,7 @@ class SentBubleMessage extends StatelessWidget {
       : super(key: key);
 
   final bool isSent;
-  final UserModel userModel;
+  final User userModel;
   final MessageModel messageModel;
   final bool hasAvatar;
 
@@ -48,19 +49,19 @@ class SentBubleMessage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(messageModel.content ?? '').messageStyle(),
+                    Text(messageModel.content ?? '')
+                        .defaultStyle()
+                        .fontSize(16)
+                        .fontWeight(FontWeight.w400),
                     const SizedBox(
                       height: 3,
                     ),
                     Text(
                       DateFormat('hh:mm a')
                           .format(messageModel.time ?? DateTime.now()),
-                      style: TextStyle(
-                          fontSize: 12.sp,
-                          color: isSent
-                              ? const Color(0xff62AC55)
-                              : const Color(0xffA1AAB3)),
-                    ),
+                    ).defaultStyle().fontSize(12).color(isSent
+                        ? const Color(0xff62AC55)
+                        : const Color(0xffA1AAB3)),
                   ],
                 ),
               ),
@@ -85,7 +86,7 @@ class SentBubleMessage extends StatelessWidget {
         height: 25,
         width: 25,
         padding: 0,
-        avatar: userModel.avatar ?? '',
+        avatar: userModel.picture,
       );
     }
     return const SizedBox(

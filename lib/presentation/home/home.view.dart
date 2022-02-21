@@ -107,17 +107,6 @@ class HomeView extends BaseView<HomeViewModel> {
                         width: double.infinity,
                         height: 39,
                         child: NormalButton(
-                          child: const Text("HOST").defaultStyle().fontWeight(FontWeight.w500).color(Colors.white),
-                          onPressed: viewModel.toHostVideoChat,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 39,
-                        child: NormalButton(
                           onPressed: viewModel.toJoinVideoChat,
                           child: const Text("JOIN").defaultStyle().fontWeight(FontWeight.w500).color(Colors.white),
                         ),

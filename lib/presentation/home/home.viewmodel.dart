@@ -17,7 +17,7 @@ abstract class _HomeViewModel extends BaseViewModel with Store {
   _HomeViewModel(this.useCase);
 
   @observable
-  var roomName = "";
+  var roomName = "1234";
 
   @observable
   var callMode = CallModeType.sfu;
@@ -36,19 +36,13 @@ abstract class _HomeViewModel extends BaseViewModel with Store {
   }
 
   @action
-  toHostVideoChat() {
-    if (isFormValid) Get.toNamed(Routes.VIDEO_CHAT);
-  }
-
-  @action
   toJoinVideoChat() {
-    if (isFormValid) Get.toNamed(Routes.VIDEO_CHAT);
+    if (isFormValid) Get.toNamed(Routes.VIDEO_CHAT, arguments: roomName);
   }
 
   @action
   setCallModeType(CallModeType callModeType) => callMode = callModeType;
 
   @action
-  String? roomNameValidator(String? value) =>
-      (value == null || value.isEmpty || value.length > 20) ? "Invalid" : null;
+  String? roomNameValidator(String? value) => (value == null || value.isEmpty || value.length > 20) ? "Invalid" : null;
 }

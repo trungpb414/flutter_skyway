@@ -238,8 +238,8 @@ public class FlutterSkywayPeer {
             }
             if (_localStream == null) {
                 final MediaConstraints constraints = new MediaConstraints();
-                constraints.maxWidth = 960;
-                constraints.maxHeight = 540;
+                constraints.maxWidth = 100;
+                constraints.maxHeight = 100;
                 constraints.cameraPosition = MediaConstraints.CameraPositionEnum.FRONT;
 
                 Navigator.initialize(_peer);
@@ -249,6 +249,7 @@ public class FlutterSkywayPeer {
             if (_localCanvas != null) {
                 _localVideoId = localVideoId;
                 _localStream.addVideoRenderer(_localCanvas, 0);
+                _localStream.setEnableAudioTrack(0, true);
             } else {
 
                 throw new IllegalArgumentException();

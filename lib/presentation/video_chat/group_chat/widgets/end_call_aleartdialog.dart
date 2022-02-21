@@ -13,9 +13,8 @@ class EndCallDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('End the call for everyone?'),
-      content:
-          const Text('Are you sure you want to end the call for everyone?'),
+      title: const Text('End the call?'),
+      content: const Text('Are you sure you want to end the call?'),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(7.0),
       ),

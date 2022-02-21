@@ -35,6 +35,10 @@ class FlutterSkywayPeer: NSObject {
         setupCallbacks()
     }
     
+    deinit {
+        print("PEER DEINIT")
+    }
+    
     func getRemotePeer(id: String) -> RemotePeer? {
         return remotePeers[id]
     }
@@ -178,24 +182,28 @@ class FlutterSkywayPeer: NSObject {
     
     func startLocalStream(_ id: Int) {
         if let localStream = localStream, let localVideoView = localVideoView {
+            self.localVideoView = nil
             localStream.removeVideoRenderer(localVideoView.videoView, track: 0)
         }
         
-        SKWNavigator.initialize(self.peer)
-        
         let constraints = SKWMediaConstraints()
-        constraints.maxWidth = 1000
-        constraints.maxHeight = 1000
+        constraints.maxWidth = 200
+        constraints.maxHeight = 200
         constraints.cameraPosition = .CAMERA_POSITION_FRONT
         
         self.localVideoView = FlutterSkyway.getNativeStreamView(id: id)
-        
-        guard let localStream = SKWNavigator.getUserMedia(constraints), let videoView = localVideoView?.videoView else {
-            return
+        guard let videoView = localVideoView?.videoView else { return }
+        if let localStream = localStream {
+            localStream.addVideoRenderer(videoView, track: 0)
+            localStream.setEnableAudioTrack(0, enable: true)
+            self.localStream = localStream
+        } else {
+            let localStream = SKWNavigator.getUserMedia(constraints)
+            localStream?.addVideoRenderer(videoView, track: 0)
+            localStream?.setEnableAudioTrack(0, enable: true)
+            self.localStream = localStream
         }
-        localStream.addVideoRenderer(videoView, track: 0)
-        localStream.setEnableAudioTrack(0, enable: true)
-        self.localStream = localStream
+        
     }
     
     func startCall(_ id: String) {
@@ -220,6 +228,7 @@ class FlutterSkywayPeer: NSObject {
     }
     
     func release() {
+        FlutterSkyway.streamViews = [:]
         if let localStream = localStream, let localVideoView = localVideoView {
             localStream.removeVideoRenderer(localVideoView.videoView, track: 0)
             localStream.close()

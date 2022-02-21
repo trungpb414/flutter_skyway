@@ -89,6 +89,7 @@ class FlutterSkyway {
         if let peer =  peers[peerId] {
             peer.peer.disconnect()
             peer.peer.destroy()
+            peer.release()
             peers.removeValue(forKey: peerId)
             result("success")
         }

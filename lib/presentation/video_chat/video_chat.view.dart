@@ -1,13 +1,19 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_skyway/core/base.dart';
+import 'package:flutter_skyway/presentation/common.widgets/image_button.dart';
 import 'package:flutter_skyway/presentation/video_chat/video_chat.viewmodel.dart';
+import 'package:flutter_skyway/presentation/video_chat/widgets/skyway_canvas_view.dart';
 
-import '../common.widgets/image_button.dart';
+part 'widgets/video_view.dart';
 
 class VideoChatView extends BaseView<VideoChatViewModel> {
   const VideoChatView({Key? key}) : super(key: key);
+
+  final ValueKey _localVideoKey = const ValueKey('localVideo');
 
   @override
   Widget build(BuildContext context) {
@@ -138,21 +144,102 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
   }
 
   Widget _buildVideoChat() {
-    switch (viewModel.numberOfPeople) {
-      case 1:
-        return _buildVideoChat1Person();
-      case 2:
-        return _buildVideoChat2People();
-      case 3:
-        return _buildVideoChat3People();
-      case 4:
-        return _buildVideoChat4People();
-      default:
+    return Observer(
+      builder: (context) {
+        if (viewModel.isConnected) {
+          switch (viewModel.totalRemotePeer) {
+            case 1:
+              return buildVideoChat2People();
+            case 0:
+              return buildVideoChat1Person();
+            default:
+              return buildVideoChat1Person();
+          }
+        }
         return Container();
-    }
+      },
+    );
   }
 
-  Column _buildVideoChat2People() {
+  Center buildVideoChat1Person() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: SizedBox(
+          height: 262,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: _buildLocalVideo(),
+              ),
+              Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                        alignment: Alignment.center,
+                        height: 24,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: const Color(0xFFD4D4D4).withOpacity(0.2),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text("0:01")
+                                .defaultStyle()
+                                .fontSize(14)
+                                .fontWeight(FontWeight.w400)
+                                .color(Colors.white),
+                            const SizedBox(
+                              width: 4,
+                            ),
+                            Assets.images.icLock.svg(height: 16, width: 16)
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: const Text("You").defaultStyle().fontSize(14).fontWeight(FontWeight.w500).color(Colors.white),
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 12, right: 8),
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 30,
+                    width: 30,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: const Color(0xFFD4D4D4).withOpacity(0.2),
+                    ),
+                    child: Assets.images.icMask.svg(width: 20, height: 20),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Column buildVideoChat2People() {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [
@@ -167,7 +254,7 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Assets.images.imgPlaceHolder1.image(fit: BoxFit.fill),
+                    child: _buildLocalVideo(),
                   ),
                   Container(
                     color: Colors.black.withOpacity(0.6),
@@ -250,7 +337,7 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Assets.images.imgPlaceHolder1.image(fit: BoxFit.fill),
+                    child: _createRemoteView(viewModel.peers.keys.first),
                   ),
                   Container(
                     color: Colors.black.withOpacity(0.6),
@@ -323,88 +410,7 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
     );
   }
 
-  Widget _buildVideoChat1Person() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
-        child: SizedBox(
-          height: 262,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Assets.images.imgPlaceHolder1.image(fit: BoxFit.fill),
-              ),
-              Container(
-                color: Colors.black.withOpacity(0.6),
-              ),
-              Align(
-                alignment: Alignment.topCenter,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                        alignment: Alignment.center,
-                        height: 24,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: const Color(0xFFD4D4D4).withOpacity(0.2),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Text("0:01")
-                                .defaultStyle()
-                                .fontSize(14)
-                                .fontWeight(FontWeight.w400)
-                                .color(Colors.white),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Assets.images.icLock.svg(height: 16, width: 16)
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: const Text("You").defaultStyle().fontSize(14).fontWeight(FontWeight.w500).color(Colors.white),
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 12, right: 8),
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 30,
-                    width: 30,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: const Color(0xFFD4D4D4).withOpacity(0.2),
-                    ),
-                    child: Assets.images.icMask.svg(width: 20, height: 20),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildVideoChat3People() {
+  Widget buildVideoChat3People() {
     return Column(
       children: [
         Expanded(

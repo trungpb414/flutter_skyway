@@ -24,9 +24,6 @@ class RemotePeer {
 }
 
 abstract class _VideoChatViewModel extends BaseViewModel with Store {
-  @observable
-  int numberOfPeople = 4;
-
   ObservableList<IncomingPeopleNotification> notifications = ObservableList();
 
   VideoChatSceneUseCaseType useCase;
@@ -59,8 +56,7 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
     try {
       await checkPermission();
       if (await checkPermission()) {
-        peer = await useCase.connect("b4c7675c-056e-47cb-a9ec-2a0f9f4904c2",
-            "localhost", _onSkywayEvent);
+        peer = await useCase.connect("b4c7675c-056e-47cb-a9ec-2a0f9f4904c2", "localhost", _onSkywayEvent);
       } else {}
     } on Exception catch (e) {
       Get.defaultDialog(title: "Error", middleText: e.toString());
@@ -90,15 +86,13 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   }
 
   @action
-  increaseNotification() async {
-    numberOfPeople = (numberOfPeople + 1) % 4 + 1;
+  increaseNotification(String remotePeerId) async {
     notifications.add(
       IncomingPeopleNotification(
-          circleImage: Assets.images.imgAvatarPlaceHolder.image(),
-          name: "John ${notifications.length + 1}"),
+          circleImage: Assets.images.imgAvatarPlaceHolder.image(), name: "#remotePeerId $remotePeerId"),
     );
     await Future.delayed(
-      const Duration(seconds: 2),
+      const Duration(seconds: 5),
       () async {
         notifications.removeAt(0);
       },
@@ -206,6 +200,7 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
 
   void _onJoin(String remotePeerId) {
     print('_onJoin:remotePeerId=$remotePeerId');
+    increaseNotification(remotePeerId);
   }
 
   void _onLeave(String remotePeerId) {

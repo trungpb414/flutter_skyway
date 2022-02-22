@@ -45,19 +45,25 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
                               Positioned(
                                 top: 0,
                                 left: 0,
-                                child: Assets.images.icCircleBtnChat.svg(height: 44, width: 44),
+                                child: Assets.images.icCircleBtnChat
+                                    .svg(height: 44, width: 44),
                               ),
                               Positioned(
                                 top: -4,
                                 left: 27,
                                 child: Container(
                                   alignment: Alignment.center,
-                                  decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+                                  decoration: const BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle),
                                   height: 24,
                                   width: 24,
                                   child: const Text(
                                     "1",
-                                    style: TextStyle(color: Colors.white, fontStyle: FontStyle.normal, fontSize: 13),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontStyle: FontStyle.normal,
+                                        fontSize: 13),
                                   ),
                                 ),
                               )
@@ -70,7 +76,8 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
                         onTap: () {
                           viewModel.showSetting(context);
                         },
-                        child: Assets.images.icCircleBtnMore.svg(height: 44, width: 44),
+                        child: Assets.images.icCircleBtnMore
+                            .svg(height: 44, width: 44),
                       ),
                     ],
                   ),
@@ -148,6 +155,10 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
       builder: (context) {
         if (viewModel.isConnected) {
           switch (viewModel.totalRemotePeer) {
+            case 3:
+              return _buildVideoChat4People();
+            case 2:
+              return buildVideoChat3People();
             case 1:
               return buildVideoChat2People();
             case 0:
@@ -161,78 +172,88 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
     );
   }
 
-  Center buildVideoChat1Person() {
+  Widget buildVideoChat1Person() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
-        child: SizedBox(
-          height: 262,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: _buildLocalVideo(),
-              ),
-              Align(
-                alignment: Alignment.topCenter,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                        alignment: Alignment.center,
-                        height: 24,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: const Color(0xFFD4D4D4).withOpacity(0.2),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Text("0:01")
-                                .defaultStyle()
-                                .fontSize(14)
-                                .fontWeight(FontWeight.w400)
-                                .color(Colors.white),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Assets.images.icLock.svg(height: 16, width: 16)
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 4,
+        ),
+        child: AspectRatio(
+          aspectRatio: 6 / 4,
+          child: SizedBox(
+            height: 262,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: _buildLocalVideo(),
                 ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: const Text("You").defaultStyle().fontSize(14).fontWeight(FontWeight.w500).color(Colors.white),
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 12, right: 8),
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 30,
-                    width: 30,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: const Color(0xFFD4D4D4).withOpacity(0.2),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 4, horizontal: 8),
+                          alignment: Alignment.center,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: const Color(0xFFD4D4D4).withOpacity(0.2),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Text("0:01")
+                                  .defaultStyle()
+                                  .fontSize(14)
+                                  .fontWeight(FontWeight.w400)
+                                  .color(Colors.white),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Assets.images.icLock.svg(height: 16, width: 16)
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    child: Assets.images.icMask.svg(width: 20, height: 20),
                   ),
                 ),
-              ),
-            ],
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: const Text("You")
+                        .defaultStyle()
+                        .fontSize(14)
+                        .fontWeight(FontWeight.w500)
+                        .color(Colors.white),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 12, right: 8),
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 30,
+                      width: 30,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: const Color(0xFFD4D4D4).withOpacity(0.2),
+                      ),
+                      child: Assets.images.icMask.svg(width: 20, height: 20),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -268,7 +289,8 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 8),
                             alignment: Alignment.center,
                             height: 24,
                             decoration: BoxDecoration(
@@ -298,8 +320,11 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
                     alignment: Alignment.bottomCenter,
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 16),
-                      child:
-                          const Text("You").defaultStyle().fontSize(14).fontWeight(FontWeight.w500).color(Colors.white),
+                      child: const Text("You")
+                          .defaultStyle()
+                          .fontSize(14)
+                          .fontWeight(FontWeight.w500)
+                          .color(Colors.white),
                     ),
                   ),
                   Align(
@@ -351,7 +376,8 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 8),
                             alignment: Alignment.center,
                             height: 24,
                             decoration: BoxDecoration(
@@ -381,8 +407,11 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
                     alignment: Alignment.bottomCenter,
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 16),
-                      child:
-                          const Text("You").defaultStyle().fontSize(14).fontWeight(FontWeight.w500).color(Colors.white),
+                      child: const Text("You")
+                          .defaultStyle()
+                          .fontSize(14)
+                          .fontWeight(FontWeight.w500)
+                          .color(Colors.white),
                     ),
                   ),
                   Align(
@@ -425,7 +454,8 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Assets.images.imgPlaceHolder1.image(fit: BoxFit.fill),
+                    child:
+                        Assets.images.imgPlaceHolder1.image(fit: BoxFit.fill),
                   ),
                   Container(
                     color: Colors.black.withOpacity(0.6),
@@ -439,7 +469,8 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 8),
                             alignment: Alignment.center,
                             height: 24,
                             decoration: BoxDecoration(
@@ -469,8 +500,11 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
                     alignment: Alignment.bottomCenter,
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 16),
-                      child:
-                          const Text("You").defaultStyle().fontSize(14).fontWeight(FontWeight.w500).color(Colors.white),
+                      child: const Text("You")
+                          .defaultStyle()
+                          .fontSize(14)
+                          .fontWeight(FontWeight.w500)
+                          .color(Colors.white),
                     ),
                   ),
                   Align(
@@ -525,7 +559,8 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
                                 ),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(12),
-                                  child: Assets.images.imgPlaceHolder2.image(fit: BoxFit.fill),
+                                  child: Assets.images.imgPlaceHolder2
+                                      .image(fit: BoxFit.fill),
                                 ),
                               ),
                               Container(
@@ -538,7 +573,8 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
                                     top: 12,
                                     right: 8,
                                   ),
-                                  child: Assets.images.icDots.svg(height: 24, width: 24),
+                                  child: Assets.images.icDots
+                                      .svg(height: 24, width: 24),
                                 ),
                               ),
                               Align(
@@ -567,7 +603,8 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
                             children: [
                               ClipRRect(
                                   borderRadius: BorderRadius.circular(12),
-                                  child: Assets.images.imgPlaceHolder3.image(fit: BoxFit.fill)),
+                                  child: Assets.images.imgPlaceHolder3
+                                      .image(fit: BoxFit.fill)),
                               Container(
                                 color: Colors.black.withOpacity(0.6),
                               ),
@@ -578,7 +615,8 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
                                     top: 12,
                                     right: 8,
                                   ),
-                                  child: Assets.images.icDots.svg(height: 24, width: 24),
+                                  child: Assets.images.icDots
+                                      .svg(height: 24, width: 24),
                                 ),
                               ),
                               Align(
@@ -596,7 +634,8 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
                                       const SizedBox(
                                         width: 6,
                                       ),
-                                      Assets.images.icMicUnmute.svg(height: 16, width: 16),
+                                      Assets.images.icMicUnmute
+                                          .svg(height: 16, width: 16),
                                     ],
                                   ),
                                 ),
@@ -622,7 +661,9 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
         shrinkWrap: true,
         itemCount: viewModel.notifications.length,
         itemBuilder: (_, index) {
-          return buildNotificationItem(viewModel.notifications[index].circleImage, viewModel.notifications[index].name);
+          return buildNotificationItem(
+              viewModel.notifications[index].circleImage,
+              viewModel.notifications[index].name);
         },
       ),
     );
@@ -686,13 +727,17 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
             children: [
               _buildItemVideoChat(
                 name: "You",
-                backgroundImage: Assets.images.imgAvatarPlaceHolder2.image(fit: BoxFit.cover),
-                circleImage: Assets.images.imgCircleAvartarPlaceHolder.image(width: 84, height: 84, fit: BoxFit.cover),
+                backgroundImage: Assets.images.imgAvatarPlaceHolder2
+                    .image(fit: BoxFit.cover),
+                circleImage: Assets.images.imgCircleAvartarPlaceHolder
+                    .image(width: 84, height: 84, fit: BoxFit.cover),
               ),
               _buildItemVideoChat(
                 name: "You",
-                backgroundImage: Assets.images.imgAvatarPlaceHolder2.image(fit: BoxFit.cover),
-                circleImage: Assets.images.imgCircleAvartarPlaceHolder.image(width: 84, height: 84, fit: BoxFit.cover),
+                backgroundImage: Assets.images.imgAvatarPlaceHolder2
+                    .image(fit: BoxFit.cover),
+                circleImage: Assets.images.imgCircleAvartarPlaceHolder
+                    .image(width: 84, height: 84, fit: BoxFit.cover),
               ),
             ],
           ),
@@ -702,13 +747,17 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
             children: [
               _buildItemVideoChat(
                 name: "You",
-                backgroundImage: Assets.images.imgAvatarPlaceHolder2.image(fit: BoxFit.cover),
-                circleImage: Assets.images.imgCircleAvartarPlaceHolder.image(width: 84, height: 84, fit: BoxFit.cover),
+                backgroundImage: Assets.images.imgAvatarPlaceHolder2
+                    .image(fit: BoxFit.cover),
+                circleImage: Assets.images.imgCircleAvartarPlaceHolder
+                    .image(width: 84, height: 84, fit: BoxFit.cover),
               ),
               _buildItemVideoChat(
                 name: "You",
-                backgroundImage: Assets.images.imgAvatarPlaceHolder2.image(fit: BoxFit.cover),
-                circleImage: Assets.images.imgCircleAvartarPlaceHolder.image(width: 84, height: 84, fit: BoxFit.cover),
+                backgroundImage: Assets.images.imgAvatarPlaceHolder2
+                    .image(fit: BoxFit.cover),
+                circleImage: Assets.images.imgCircleAvartarPlaceHolder
+                    .image(width: 84, height: 84, fit: BoxFit.cover),
               ),
             ],
           ),
@@ -717,7 +766,10 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
     );
   }
 
-  Widget _buildItemVideoChat({required String name, required Image backgroundImage, required Image circleImage}) {
+  Widget _buildItemVideoChat(
+      {required String name,
+      required Image backgroundImage,
+      required Image circleImage}) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(4),

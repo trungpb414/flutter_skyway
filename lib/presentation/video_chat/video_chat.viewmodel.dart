@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_skyway/core/base.dart';
-import 'package:flutter_skyway/presentation/video_chat/video_chat.suc.dart';
-import 'package:get/get.dart';
-import 'package:mobx/mobx.dart';
 import 'package:flutter_skyway/domain/entities/skyway_peer.dart';
 import 'package:flutter_skyway/presentation/app/app.pages.dart';
 import 'package:flutter_skyway/presentation/video_chat/group_chat/widgets/end_call_aleartdialog.dart';
@@ -28,7 +25,7 @@ class RemotePeer {
 
 abstract class _VideoChatViewModel extends BaseViewModel with Store {
   @observable
-  int numberOfPeople = 1;
+  int numberOfPeople = 4;
 
   ObservableList<IncomingPeopleNotification> notifications = ObservableList();
 
@@ -55,7 +52,6 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
 
   @observable
   ObservableMap<String, RemotePeer> peers = ObservableMap();
-
   @override
   void onInit() async {
     super.onInit();
@@ -63,7 +59,8 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
     try {
       await checkPermission();
       if (await checkPermission()) {
-        peer = await useCase.connect("b4c7675c-056e-47cb-a9ec-2a0f9f4904c2", "localhost", _onSkywayEvent);
+        peer = await useCase.connect("b4c7675c-056e-47cb-a9ec-2a0f9f4904c2",
+            "localhost", _onSkywayEvent);
       } else {}
     } on Exception catch (e) {
       Get.defaultDialog(title: "Error", middleText: e.toString());
@@ -97,7 +94,8 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
     numberOfPeople = (numberOfPeople + 1) % 4 + 1;
     notifications.add(
       IncomingPeopleNotification(
-          circleImage: Assets.images.imgAvatarPlaceHolder.image(), name: "John ${notifications.length + 1}"),
+          circleImage: Assets.images.imgAvatarPlaceHolder.image(),
+          name: "John ${notifications.length + 1}"),
     );
     await Future.delayed(
       const Duration(seconds: 2),

@@ -51,7 +51,7 @@ class SentBubleMessage extends StatelessWidget {
                   children: [
                     Text(messageModel.content ?? '')
                         .defaultStyle()
-                        .fontSize(16)
+                        .fontSize(16.sp)
                         .fontWeight(FontWeight.w400),
                     const SizedBox(
                       height: 3,
@@ -59,7 +59,7 @@ class SentBubleMessage extends StatelessWidget {
                     Text(
                       DateFormat('hh:mm a')
                           .format(messageModel.time ?? DateTime.now()),
-                    ).defaultStyle().fontSize(12).color(isSent
+                    ).defaultStyle().fontSize(12.sp).color(isSent
                         ? const Color(0xff62AC55)
                         : const Color(0xffA1AAB3)),
                   ],

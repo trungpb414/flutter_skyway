@@ -14,6 +14,8 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
+      designSize: Size(360, 780),
+      minTextAdapt: true,
       builder: () => GetMaterialApp(
         debugShowCheckedModeBanner: true,
         theme: ThemeData(

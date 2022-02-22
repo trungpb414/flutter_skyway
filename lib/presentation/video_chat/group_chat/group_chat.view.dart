@@ -23,12 +23,10 @@ class GroupChatView extends BaseView<GroupChatViewModel> {
           children: [
             Text(
               'Call ${viewModel.getCallTime()}',
-              style: TextStyle(fontSize: 17.sp, fontWeight: FontWeight.w500),
-            ),
+            ).defaultStyle().fontSize(17.sp).fontWeight(FontWeight.w500),
             Text(
               '${viewModel.users.length} members',
-              style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
-            ),
+            ).defaultStyle().fontSize(14.sp).fontWeight(FontWeight.w400),
           ],
         ),
         centerTitle: false,
@@ -36,7 +34,7 @@ class GroupChatView extends BaseView<GroupChatViewModel> {
           IconButton(
             icon: const Icon(Icons.more_vert_rounded),
             onPressed: () {
-              viewModel.showSetting(context);
+              viewModel.showSetting();
             },
           )
         ],
@@ -48,70 +46,73 @@ class GroupChatView extends BaseView<GroupChatViewModel> {
               padding: const EdgeInsets.symmetric(
                 horizontal: 10,
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Positioned(
-                        child: CircleThumbAvatar(
-                          avatar: viewModel.users[2].picture,
-                        ),
-                        left: 50,
-                      ),
-                      Positioned(
-                        child: CircleThumbAvatar(
-                          avatar: viewModel.users[1].picture,
-                        ),
-                        left: 25,
-                      ),
-                      Positioned(
-                        child: CircleThumbAvatar(
-                          avatar: viewModel.users[0].picture,
-                        ),
-                      ),
-                      Positioned(
-                        left: 90,
-                        top: 0,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Video chat',
-                              style: TextStyle(
-                                  fontSize: 13.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: const Color(0xff3A8CCF)),
+              child: SizedBox(
+                height: 50.h,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 100,
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Positioned(
+                            child: CircleThumbAvatar(
+                              avatar: viewModel.users[2].picture,
                             ),
-                            Text(
-                              '3 participants',
-                              style: TextStyle(
-                                  fontSize: 13.sp,
-                                  fontWeight: FontWeight.w400,
-                                  color: const Color(0xff999999)),
+                            left: 50,
+                          ),
+                          Positioned(
+                            child: CircleThumbAvatar(
+                              avatar: viewModel.users[1].picture,
                             ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: SizedBox(
-                      width: 70,
-                      height: 30,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          viewModel.backToVideo();
-                        },
-                        child: const Text(
-                          'Back',
-                        ),
+                            left: 25,
+                          ),
+                          Positioned(
+                            child: CircleThumbAvatar(
+                              avatar: viewModel.users[0].picture,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  )
-                ],
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Video chat',
+                        )
+                            .defaultStyle()
+                            .fontSize(13.sp)
+                            .fontWeight(FontWeight.w400)
+                            .color(Color(0xff3A8CCF)),
+                        Text(
+                          '${viewModel.users.length} participants',
+                        )
+                            .defaultStyle()
+                            .fontSize(13.sp)
+                            .fontWeight(FontWeight.w400)
+                            .color(const Color(0xff999999)),
+                      ],
+                    ),
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: SizedBox(
+                        width: 70,
+                        height: 30,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            viewModel.backToVideo();
+                          },
+                          child: const Text(
+                            'Back',
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
             Expanded(
@@ -147,7 +148,10 @@ class GroupChatView extends BaseView<GroupChatViewModel> {
                                 style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w500),
-                              ),
+                              )
+                                  .defaultStyle()
+                                  .fontWeight(FontWeight.w500)
+                                  .color(Colors.white),
                             ),
                           ],
                         );

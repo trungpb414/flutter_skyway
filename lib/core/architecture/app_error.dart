@@ -17,7 +17,8 @@ class AppError {
 
   AppError(Exception? error) {
     if (error is DioError) {
-      print("AppError(DioError): type is ${error.type}, message is ${error.message}");
+      print(
+          "AppError(DioError): type is ${error.type}, message is ${error.message}");
       message = error.message;
       switch (error.type) {
         case DioErrorType.other:

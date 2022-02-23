@@ -33,6 +33,8 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   @observable
   SkywayPeer? peer;
 
+  SkywayPeer? screenPeer;
+
   @computed
   bool get isConnected => peer != null;
 
@@ -99,10 +101,23 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   }
 
   @override
-  void onClose() {
+  void onClose() async {
     super.onClose();
-    peer?.disconnect();
+    await peer?.disconnect();
+    await screenPeer?.disconnect();
   }
+
+  void shareTrigger() async {
+    try {
+      await peer?.requestShareScreenPermission();
+      screenPeer = await useCase.connect("b4c7675c-056e-47cb-a9ec-2a0f9f4904c2", "localhost", _onShareSkywayEvent);
+      await screenPeer?.joinAsScreen(roomName, SkywayRoomMode.SFU);
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
+  void _onShareSkywayEvent(SkywayEvent event, Map<dynamic, dynamic> args) { }
 
   Future<bool> checkPermission() async {
     var cameraStatus = await Permission.camera.status;
@@ -214,7 +229,9 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
     Get.bottomSheet(
         SettingBottomSheet(
           onRecordSelected: () {},
-          onShareSelected: () {},
+          onShareSelected: () {
+            shareTrigger();
+          },
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),

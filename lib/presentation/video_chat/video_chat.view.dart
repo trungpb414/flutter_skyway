@@ -99,19 +99,29 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
                         ),
                         onPressed: viewModel.rotateCameraTrigger,
                       ),
-                      ImageButton(
-                        onPressed: viewModel.toggleCameraTrigger,
-                        child: Assets.images.icCircleBtnCamera.svg(
-                          height: 58,
-                          width: 58,
-                        ),
+                      Observer(
+                        builder: (context) {
+                          return ImageButton(
+                            onPressed: viewModel.toggleCameraTrigger,
+                            child: Assets.images.icCircleBtnCamera.svg(
+                              color: viewModel.isCameraEnabled ? null: Colors.red,
+                              height: 58,
+                              width: 58,
+                            ),
+                          );
+                        }
                       ),
-                      ImageButton(
-                        onPressed: viewModel.toggleMicTrigger,
-                        child: Assets.images.icCircleBtnMic.svg(
-                          height: 58,
-                          width: 58,
-                        ),
+                      Observer(
+                        builder: (context) {
+                          return ImageButton(
+                            onPressed: viewModel.toggleMicTrigger,
+                            child: Assets.images.icCircleBtnMic.svg(
+                              color: viewModel.isAudioEnabled ? null: Colors.red,
+                              height: 58,
+                              width: 58,
+                            ),
+                          );
+                        }
                       ),
                       ImageButton(
                         onPressed: () {

@@ -5,6 +5,7 @@ import android.media.projection.MediaProjection;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 
@@ -29,6 +30,7 @@ import io.skyway.Peer.OnCallback;
 import io.skyway.Peer.Peer;
 import io.skyway.Peer.PeerError;
 import io.skyway.Peer.Room;
+import io.skyway.Peer.RoomDataMessage;
 import io.skyway.Peer.RoomOption;
 
 public class FlutterSkywayPeer {
@@ -194,6 +196,7 @@ public class FlutterSkywayPeer {
             _localShareScreenStream = Navigator.getDisplayMedia(constraints,
                     MainActivity.Companion.getMediaProjectionPermissionResultData(),
                     new MediaProjectionCallback());
+            _localShareScreenStream.setEnableAudioTrack(0, false);
         }
         if (DEBUG) Log.v(TAG, "join:" + roomName + ",mode=" + mode);
         if (!isConnected() || (_localShareScreenStream == null)) {
@@ -315,6 +318,24 @@ public class FlutterSkywayPeer {
             }
         } else {
             throw new IllegalArgumentException("Specific remote peer not found,remote peer=" + remotePeerId);
+        }
+    }
+
+    public void switchCamera() {
+        _localStream.switchCamera();
+    }
+
+    public void setEnableAudioTrack(final boolean enabled) {
+        _localStream.setEnableAudioTrack(0, enabled);
+    }
+
+    public void setEnableVideoTrack(final boolean enabled) {
+        _localStream.setEnableVideoTrack(0, enabled);
+    }
+
+    public void sendText(final String message) {
+        if (_room != null) {
+            _room.send(message);
         }
     }
 
@@ -571,6 +592,19 @@ public class FlutterSkywayPeer {
                 if (object instanceof MediaStream) {
                     final MediaStream stream = (MediaStream) object;
                     removeRemoteStream(stream.getPeerId());
+                }
+            }
+        });
+        room.on(Room.RoomEventEnum.DATA, new OnCallback() {
+            @Override
+            public void onCallback(Object object) {
+                if (DEBUG) Log.v(TAG, "RoomEventEnum.DATA:" + object);
+                if (object instanceof RoomDataMessage) {
+                    final RoomDataMessage roomData = (RoomDataMessage) object;
+                    final Map<String, String> message
+                            = createMessage(Const.SkywayEvent.onMessageData);
+                    message.put("message", (String) roomData.data);
+                    sendMessage(message);
                 }
             }
         });

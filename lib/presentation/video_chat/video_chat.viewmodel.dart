@@ -51,6 +51,13 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
 
   @observable
   ObservableMap<String, RemotePeer> peers = ObservableMap();
+
+  @observable
+  bool isCameraEnabled = true;
+
+  @observable
+  bool isAudioEnabled = true;
+
   @override
   void onInit() async {
     super.onInit();
@@ -66,13 +73,21 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   }
 
   @action
-  rotateCameraTrigger() {}
+  rotateCameraTrigger() {
+    peer?.switchCamera();
+  }
 
   @action
-  toggleCameraTrigger() {}
+  toggleCameraTrigger() {
+    peer?.setEnableVideoTrack(!isCameraEnabled);
+    isCameraEnabled = !isCameraEnabled;
+  }
 
   @action
-  toggleMicTrigger() {}
+  toggleMicTrigger() {
+    peer?.setEnableAudioTrack(!isAudioEnabled);
+    isAudioEnabled = !isAudioEnabled;
+  }
 
   @action
   declineTrigger() {
@@ -150,11 +165,11 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
     await peer?.join(roomName, SkywayRoomMode.SFU);
   }
 
-  void _onSkywayEvent(SkywayEvent event, Map<dynamic, dynamic> args) {
+    void _onSkywayEvent(SkywayEvent event, Map<dynamic, dynamic> args) {
     switch (event) {
       case SkywayEvent.onConnect:
         _onConnect(args['peerId']);
-        break;
+      break;
       case SkywayEvent.onDisconnect:
         _onDisconnect(args['peerId']);
         break;
@@ -177,6 +192,9 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
         _onLeave(args['remotePeerId']);
         break;
       case SkywayEvent.onCall:
+        break;
+      case SkywayEvent.onMessageData:
+        _onMessageData(args['message']);
         break;
     }
   }
@@ -219,6 +237,10 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
 
   void _onLeave(String remotePeerId) {
     print('_onLeave:remotePeerId=$remotePeerId');
+  }
+
+  void _onMessageData(String message) {
+    print('_onMessageData:message=$message');
   }
 
   void goToChat() {

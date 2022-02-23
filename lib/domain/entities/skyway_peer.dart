@@ -118,6 +118,20 @@ class SkywayPeer {
     });
   }
 
+  Future<void> requestShareScreenPermission() async {
+    print("requestShareScreenPermission");
+    return await channel.invokeMethod('requestShareScreenPermission', {});
+  }
+
+  Future<void> joinAsScreen(String room, SkywayRoomMode mode) async {
+    print("join:room=$room,mode=$mode");
+    return await channel.invokeMethod('joinAsScreen', {
+      'peerId': peerId,
+      'room': room,
+      "mode": mode.index,
+    });
+  }
+
   void _eventListener(dynamic event) {
     print("_eventListener:$event");
     final Map<dynamic, dynamic> args = event;

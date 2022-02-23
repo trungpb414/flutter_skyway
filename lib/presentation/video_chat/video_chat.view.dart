@@ -9,6 +9,10 @@ import 'package:flutter_skyway/presentation/video_chat/video_chat.viewmodel.dart
 import 'package:flutter_skyway/presentation/video_chat/widgets/skyway_canvas_view.dart';
 
 part 'widgets/video_view.dart';
+part 'widgets/video_chat_item/build_video_chat_1_person.dart';
+part 'widgets/video_chat_item/build_video_chat_2_people.dart';
+part 'widgets/video_chat_item/build_video_chat_3_people.dart';
+part 'widgets/video_chat_item/build_video_chat_4_people.dart';
 
 class VideoChatView extends BaseView<VideoChatViewModel> {
   const VideoChatView({Key? key}) : super(key: key);
@@ -45,19 +49,25 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
                               Positioned(
                                 top: 0,
                                 left: 0,
-                                child: Assets.images.icCircleBtnChat.svg(height: 44, width: 44),
+                                child: Assets.images.icCircleBtnChat
+                                    .svg(height: 44, width: 44),
                               ),
                               Positioned(
                                 top: -4,
                                 left: 27,
                                 child: Container(
                                   alignment: Alignment.center,
-                                  decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+                                  decoration: const BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle),
                                   height: 24,
                                   width: 24,
                                   child: const Text(
                                     "1",
-                                    style: TextStyle(color: Colors.white, fontStyle: FontStyle.normal, fontSize: 13),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontStyle: FontStyle.normal,
+                                        fontSize: 13),
                                   ),
                                 ),
                               )
@@ -70,7 +80,8 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
                         onTap: () {
                           viewModel.showSetting();
                         },
-                        child: Assets.images.icCircleBtnMore.svg(height: 44, width: 44),
+                        child: Assets.images.icCircleBtnMore
+                            .svg(height: 44, width: 44),
                       ),
                     ],
                   ),
@@ -99,30 +110,27 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
                         ),
                         onPressed: viewModel.rotateCameraTrigger,
                       ),
-                      Observer(
-                        builder: (context) {
-                          return ImageButton(
-                            onPressed: viewModel.toggleCameraTrigger,
-                            child: Assets.images.icCircleBtnCamera.svg(
-                              color: viewModel.isCameraEnabled ? null: Colors.red,
-                              height: 58,
-                              width: 58,
-                            ),
-                          );
-                        }
-                      ),
-                      Observer(
-                        builder: (context) {
-                          return ImageButton(
-                            onPressed: viewModel.toggleMicTrigger,
-                            child: Assets.images.icCircleBtnMic.svg(
-                              color: viewModel.isAudioEnabled ? null: Colors.red,
-                              height: 58,
-                              width: 58,
-                            ),
-                          );
-                        }
-                      ),
+                      Observer(builder: (context) {
+                        return ImageButton(
+                          onPressed: viewModel.toggleCameraTrigger,
+                          child: Assets.images.icCircleBtnCamera.svg(
+                            color:
+                                viewModel.isCameraEnabled ? null : Colors.red,
+                            height: 58,
+                            width: 58,
+                          ),
+                        );
+                      }),
+                      Observer(builder: (context) {
+                        return ImageButton(
+                          onPressed: viewModel.toggleMicTrigger,
+                          child: Assets.images.icCircleBtnMic.svg(
+                            color: viewModel.isAudioEnabled ? null : Colors.red,
+                            height: 58,
+                            width: 58,
+                          ),
+                        );
+                      }),
                       ImageButton(
                         onPressed: () {
                           viewModel.declineTrigger();
@@ -175,474 +183,15 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
     );
   }
 
-  Widget buildVideoChat1Person() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 4,
-        ),
-        child: AspectRatio(
-          aspectRatio: 6 / 4,
-          child: SizedBox(
-            height: 262,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: _buildLocalVideo(),
-                ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                          alignment: Alignment.center,
-                          height: 24,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: const Color(0xFFD4D4D4).withOpacity(0.2),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Text("0:01")
-                                  .defaultStyle()
-                                  .fontSize(14)
-                                  .fontWeight(FontWeight.w400)
-                                  .color(Colors.white),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              Assets.images.icLock.svg(height: 16, width: 16)
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child:
-                        const Text("You").defaultStyle().fontSize(14).fontWeight(FontWeight.w500).color(Colors.white),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 12, right: 8),
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: const Color(0xFFD4D4D4).withOpacity(0.2),
-                      ),
-                      child: Assets.images.icMask.svg(width: 20, height: 20),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Column buildVideoChat2People() {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Expanded(
-          flex: 1,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: SizedBox(
-              height: 262,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: _buildLocalVideo(),
-                  ),
-                  Container(
-                    color: Colors.black.withOpacity(0.6),
-                  ),
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 12),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                            alignment: Alignment.center,
-                            height: 24,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: const Color(0xFFD4D4D4).withOpacity(0.2),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Text("0:01")
-                                    .defaultStyle()
-                                    .fontSize(14)
-                                    .fontWeight(FontWeight.w400)
-                                    .color(Colors.white),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                Assets.images.icLock.svg(height: 16, width: 16)
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child:
-                          const Text("You").defaultStyle().fontSize(14).fontWeight(FontWeight.w500).color(Colors.white),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 12, right: 8),
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: 30,
-                        width: 30,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: const Color(0xFFD4D4D4).withOpacity(0.2),
-                        ),
-                        child: Assets.images.icMask.svg(width: 20, height: 20),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 4,
-        ),
-        Expanded(
-          flex: 1,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: SizedBox(
-              height: 262,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: _createRemoteView(viewModel.peers.keys.first),
-                  ),
-                  Container(
-                    color: Colors.black.withOpacity(0.6),
-                  ),
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 12),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                            alignment: Alignment.center,
-                            height: 24,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: const Color(0xFFD4D4D4).withOpacity(0.2),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Text("0:01")
-                                    .defaultStyle()
-                                    .fontSize(14)
-                                    .fontWeight(FontWeight.w400)
-                                    .color(Colors.white),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                Assets.images.icLock.svg(height: 16, width: 16)
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child:
-                          const Text("You").defaultStyle().fontSize(14).fontWeight(FontWeight.w500).color(Colors.white),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 12, right: 8),
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: 30,
-                        width: 30,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: const Color(0xFFD4D4D4).withOpacity(0.2),
-                        ),
-                        child: Assets.images.icMask.svg(width: 20, height: 20),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget buildVideoChat3People() {
-    return Column(
-      children: [
-        Expanded(
-          flex: 1,
-          child: SizedBox(
-            height: 262,
-            width: double.infinity,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Assets.images.imgPlaceHolder1.image(fit: BoxFit.fill),
-                  ),
-                  Container(
-                    color: Colors.black.withOpacity(0.6),
-                  ),
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 12),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                            alignment: Alignment.center,
-                            height: 24,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: const Color(0xFFD4D4D4).withOpacity(0.2),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Text("0:01")
-                                    .defaultStyle()
-                                    .fontSize(14)
-                                    .fontWeight(FontWeight.w400)
-                                    .color(Colors.white),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                Assets.images.icLock.svg(height: 16, width: 16)
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child:
-                          const Text("You").defaultStyle().fontSize(14).fontWeight(FontWeight.w500).color(Colors.white),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 12, right: 8),
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: 30,
-                        width: 30,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: const Color(0xFFD4D4D4).withOpacity(0.2),
-                        ),
-                        child: Assets.images.icMask.svg(width: 20, height: 20),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 4,
-        ),
-        Expanded(
-          flex: 1,
-          child: SizedBox(
-            height: 284,
-            child: Stack(
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: SizedBox(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          child: Stack(
-                            fit: StackFit.expand,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                    width: 2,
-                                    color: const Color(0xFF71E079),
-                                  ),
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Assets.images.imgPlaceHolder2.image(fit: BoxFit.fill),
-                                ),
-                              ),
-                              Container(
-                                color: Colors.black.withOpacity(0.6),
-                              ),
-                              Align(
-                                alignment: Alignment.topRight,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: 12,
-                                    right: 8,
-                                  ),
-                                  child: Assets.images.icDots.svg(height: 24, width: 24),
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 12),
-                                  child: const Text("Anya")
-                                      .defaultStyle()
-                                      .fontSize(14)
-                                      .fontWeight(FontWeight.w500)
-                                      .color(Colors.white),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: SizedBox(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          child: Stack(
-                            fit: StackFit.expand,
-                            children: [
-                              ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Assets.images.imgPlaceHolder3.image(fit: BoxFit.fill)),
-                              Container(
-                                color: Colors.black.withOpacity(0.6),
-                              ),
-                              Align(
-                                alignment: Alignment.topRight,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: 12,
-                                    right: 8,
-                                  ),
-                                  child: Assets.images.icDots.svg(height: 24, width: 24),
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 12),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Text("Danil")
-                                          .defaultStyle()
-                                          .fontSize(14)
-                                          .fontWeight(FontWeight.w500)
-                                          .color(Colors.white),
-                                      const SizedBox(
-                                        width: 6,
-                                      ),
-                                      Assets.images.icMicUnmute.svg(height: 16, width: 16),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildNotification() {
     return Observer(
       builder: (_) => ListView.builder(
         shrinkWrap: true,
         itemCount: viewModel.notifications.length,
         itemBuilder: (_, index) {
-          return buildNotificationItem(viewModel.notifications[index].circleImage, viewModel.notifications[index].name);
+          return buildNotificationItem(
+              viewModel.notifications[index].circleImage,
+              viewModel.notifications[index].name);
         },
       ),
     );
@@ -696,120 +245,6 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildVideoChat4People() {
-    return Column(
-      children: [
-        Expanded(
-          child: Row(
-            children: [
-              _buildItemVideoChat(
-                name: "You",
-                backgroundImage: Assets.images.imgAvatarPlaceHolder2.image(fit: BoxFit.cover),
-                circleImage: Assets.images.imgCircleAvartarPlaceHolder.image(width: 84, height: 84, fit: BoxFit.cover),
-              ),
-              _buildItemVideoChat(
-                name: "You",
-                backgroundImage: Assets.images.imgAvatarPlaceHolder2.image(fit: BoxFit.cover),
-                circleImage: Assets.images.imgCircleAvartarPlaceHolder.image(width: 84, height: 84, fit: BoxFit.cover),
-              ),
-            ],
-          ),
-        ),
-        Expanded(
-          child: Row(
-            children: [
-              _buildItemVideoChat(
-                name: "You",
-                backgroundImage: Assets.images.imgAvatarPlaceHolder2.image(fit: BoxFit.cover),
-                circleImage: Assets.images.imgCircleAvartarPlaceHolder.image(width: 84, height: 84, fit: BoxFit.cover),
-              ),
-              _buildItemVideoChat(
-                name: "You",
-                backgroundImage: Assets.images.imgAvatarPlaceHolder2.image(fit: BoxFit.cover),
-                circleImage: Assets.images.imgCircleAvartarPlaceHolder.image(width: 84, height: 84, fit: BoxFit.cover),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildItemVideoChat({required String name, required Image backgroundImage, required Image circleImage}) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(4),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: backgroundImage,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.black.withOpacity(0.6),
-              ),
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      width: 2,
-                      color: const Color(0xFF71E079),
-                    )),
-                height: 84,
-                width: 84,
-                child: CircleAvatar(child: circleImage),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(name)
-                        .defaultStyle()
-                        .color(Colors.white)
-                        .fontStyle(FontStyle.normal)
-                        .fontWeight(FontWeight.w500)
-                        .fontSize(14),
-                    const SizedBox(
-                      width: 6,
-                    ),
-                    Assets.images.icMicUnmute.svg(height: 16, width: 16),
-                  ],
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.topRight,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: 12,
-                  right: 8,
-                ),
-                child: Assets.images.icDots.svg(height: 24, width: 24),
-              ),
-            ),
-            // const Align(
-            //   alignment: Alignment.center,
-            //   child: CircularProgressIndicator(
-            //     color: Colors.white,
-            //     strokeWidth: 2,
-            //   ),
-            // ),
-          ],
-        ),
       ),
     );
   }

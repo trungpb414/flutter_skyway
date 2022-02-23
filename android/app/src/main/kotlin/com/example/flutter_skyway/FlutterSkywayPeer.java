@@ -603,6 +603,7 @@ public class FlutterSkywayPeer {
                     final RoomDataMessage roomData = (RoomDataMessage) object;
                     final Map<String, String> message
                             = createMessage(Const.SkywayEvent.onMessageData);
+                    message.put("senderPeerId", roomData.src);
                     message.put("message", (String) roomData.data);
                     sendMessage(message);
                 }

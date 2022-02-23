@@ -14,6 +14,8 @@ class FlutterSkyway {
     private var remoteViewIds = [Int]()
     private var peers = [String : FlutterSkywayPeer]()
     
+    //TODO: Add result error
+    
     func setRegistrar(_ registrar: FlutterPluginRegistrar?) {
         self.registrar = registrar
     }
@@ -54,6 +56,10 @@ class FlutterSkyway {
             switchCamera(argument, result)
         case .sendText:
             sendText(argument, result)
+        case .setEnableAudioTrack:
+            setEnableAudioTrack(argument, result)
+        case .setEnableVideoTrack:
+            setEnableVideoTrack(argument, result)
         }
     }
     
@@ -157,6 +163,20 @@ class FlutterSkyway {
         guard let peerId = arg.peerId else { return }
         guard let peer = getPeer(peerId) else { return }
         peer.switchCamera()
+        result("success")
+    }
+    
+    func setEnableAudioTrack(_ arg: Argument, _ result: @escaping FlutterResult) {
+        guard let peerId = arg.peerId, let isEnabled = arg.isEnabled else { return }
+        guard let peer = getPeer(peerId) else { return }
+        peer.setEnableAudioTrack(isEnabled)
+        result("success")
+    }
+    
+    func setEnableVideoTrack(_ arg: Argument, _ result: @escaping FlutterResult) {
+        guard let peerId = arg.peerId, let isEnabled = arg.isEnabled else { return }
+        guard let peer = getPeer(peerId) else { return }
+        peer.setEnableVideoTrack(isEnabled)
         result("success")
     }
 }

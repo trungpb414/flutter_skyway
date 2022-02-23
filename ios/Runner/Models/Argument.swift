@@ -17,6 +17,7 @@ struct Argument: Mappable {
     var room: String?
     var mode: Int?
     var message: String?
+    var isEnabled: Bool?
     
     init?(map: Map) {
         
@@ -32,5 +33,6 @@ struct Argument: Mappable {
         room <- map["room"]
         mode <- map["mode"]
         message <- map["message"]
+        isEnabled <- map["isEnabled"]
     }
 }

@@ -154,10 +154,9 @@ class FlutterSkyway {
     }
     
     func switchCamera(_ arg: Argument, _ result: @escaping FlutterResult) {
-        guard let peerId = arg.peerId, let mode = arg.mode else { return }
+        guard let peerId = arg.peerId else { return }
         guard let peer = getPeer(peerId) else { return }
-        guard let cameraMode = SKWCameraPositionEnum(rawValue: UInt(mode)) else { return }
-        peer.switchCamera(cameraMode)
+        peer.switchCamera()
         result("success")
     }
 }

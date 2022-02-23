@@ -18,5 +18,6 @@ internal object Const {
         onLeave,
         onRelease,
         onError,
+        onMessageData
     }
 }

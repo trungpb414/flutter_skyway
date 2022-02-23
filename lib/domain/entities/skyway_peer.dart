@@ -110,11 +110,10 @@ class SkywayPeer {
     });
   }
 
-  Future<void> switchCamera(CameraMode mode) async {
+  Future<void> switchCamera() async {
     print("switchCamera:");
     return await channel.invokeMethod('switchCamera', {
-      'peerId': peerId,
-      'mode': mode.index,
+      'peerId': peerId
     });
   }
 
@@ -129,6 +128,22 @@ class SkywayPeer {
       'peerId': peerId,
       'room': room,
       "mode": mode.index,
+    });
+  }
+
+  Future<void> setEnableVideoTrack(bool isEnabled) async {
+    print("setEnableVideoTrack:");
+    return await channel.invokeMethod('setEnableVideoTrack', {
+      'peerId': peerId,
+      'isEnabled': isEnabled
+    });
+  }
+
+  Future<void> setEnableAudioTrack(bool isEnabled) async {
+    print("setEnableAudioTrack:");
+    return await channel.invokeMethod('setEnableAudioTrack', {
+      'peerId': peerId,
+      'isEnabled': isEnabled
     });
   }
 

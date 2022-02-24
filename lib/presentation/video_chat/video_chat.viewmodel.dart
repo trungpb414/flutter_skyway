@@ -206,6 +206,8 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
       case SkywayEvent.onRemoveRemoteStream:
         _onRemoveRemoteStream(args['remotePeerId']);
         break;
+      case SkywayEvent.onRelease:
+        break;
       case SkywayEvent.onOpenRoom:
         _onOpenRoom(args['room']);
         break;

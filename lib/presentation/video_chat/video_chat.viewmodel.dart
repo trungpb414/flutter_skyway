@@ -59,6 +59,12 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   @observable
   bool isAudioEnabled = true;
 
+  @observable
+  int indexFullScreenVideo = 0;
+
+  @observable
+  bool isFullScreenEnabled = false;
+
   @override
   void onInit() async {
     super.onInit();
@@ -116,6 +122,23 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
         notifications.removeAt(0);
       },
     );
+  }
+
+  @action
+  bool checkVisibilityByIndex(int currentIndex) {
+    return currentIndex == indexFullScreenVideo || indexFullScreenVideo == 0;
+  }
+
+  @action
+  setIndexFullScreenVideo(int value) {
+    indexFullScreenVideo = value;
+    isFullScreenEnabled = true;
+  }
+
+  @action
+  disableFullscreenVideoMode() {
+    indexFullScreenVideo = 0;
+    isFullScreenEnabled = false;
   }
 
   @override

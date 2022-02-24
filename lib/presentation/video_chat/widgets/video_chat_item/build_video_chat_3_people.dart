@@ -17,7 +17,6 @@ extension BuildVideoChat3People on VideoChatView {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: _buildLocalVideo(),
-                        // Assets.images.imgPlaceHolder1.image(fit: BoxFit.fill),
                   ),
                   Container(
                     color: Colors.black.withOpacity(0.6),
@@ -120,11 +119,9 @@ extension BuildVideoChat3People on VideoChatView {
                                   ),
                                 ),
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: _createRemoteView(viewModel.peers.keys.first)
-                                  // Assets.images.imgPlaceHolder2
-                                  //     .image(fit: BoxFit.fill),
-                                ),
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: _createRemoteView(
+                                        viewModel.peers.keys.first)),
                               ),
                               Container(
                                 color: Colors.black.withOpacity(0.6),
@@ -166,11 +163,8 @@ extension BuildVideoChat3People on VideoChatView {
                             children: [
                               ClipRRect(
                                   borderRadius: BorderRadius.circular(12),
-                                  child: _createRemoteView(viewModel.peers.keys.last)
-
-                                  // Assets.images.imgPlaceHolder3
-                                  //     .image(fit: BoxFit.fill)
-    ),
+                                  child: _createRemoteView(
+                                      viewModel.peers.keys.last)),
                               Container(
                                 color: Colors.black.withOpacity(0.6),
                               ),

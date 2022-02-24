@@ -34,8 +34,6 @@ abstract class _GroupChatViewModel extends BaseViewModel with Store {
   @computed
   int get totalUsers => videoVM.users.length;
 
-  List<User> get users => videoVM.users;
-
   @override
   void dispose() {
     super.dispose();

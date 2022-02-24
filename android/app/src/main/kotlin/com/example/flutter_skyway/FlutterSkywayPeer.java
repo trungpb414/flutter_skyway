@@ -682,6 +682,14 @@ public class FlutterSkywayPeer {
         }
         if (peer != null) {
             peer.release();
+            final Map<String, String> message
+                    = createMessage(Const.SkywayEvent.onRemoveRemoteStream);
+            message.put("remotePeerId", remotePeerId);
+            try {
+                sendMessage(message);
+            } catch (final Exception e) {
+                if (DEBUG) Log.w(TAG, e);
+            }
         }
     }
 

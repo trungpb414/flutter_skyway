@@ -5,12 +5,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.Map;
-
 import io.skyway.Peer.Browser.Canvas;
 import io.skyway.Peer.Browser.MediaStream;
 
-class RemotePeer {
+public class RemotePeer {
     private static final boolean DEBUG = true;
     private static final String TAG = RemotePeer.class.getSimpleName();
 

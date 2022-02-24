@@ -16,6 +16,7 @@ enum SkywayEvent {
   onCloseRoom,
   onJoin,
   onLeave,
+  onRelease,
   onMessageData
 }
 

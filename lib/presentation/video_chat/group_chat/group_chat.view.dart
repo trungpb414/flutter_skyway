@@ -22,7 +22,7 @@ class GroupChatView extends BaseView<GroupChatViewModel> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Call ${viewModel.getCallTime()}',
+              'Call ${viewModel.callTime}',
             ).defaultStyle().fontSize(17.sp).fontWeight(FontWeight.w500),
             Text(
               '${viewModel.users.length} members',

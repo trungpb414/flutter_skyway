@@ -3,8 +3,7 @@ part of "../../video_chat.view.dart";
 extension BuildVideoChat1Person on VideoChatView {
   Widget buildVideoChat1Person() {
     return Visibility(
-      visible: viewModel.indexFullScreenVideo == 1 ||
-          viewModel.indexFullScreenVideo == 0,
+      visible: viewModel.checkVisibilityByIndex(1),
       child: GestureDetector(
         onDoubleTap: () {
           viewModel.setIndexFullScreenVideo(1);
@@ -92,21 +91,21 @@ extension BuildVideoChat1Person on VideoChatView {
                         ),
                       ),
                     ),
-                    viewModel.indexFullScreenVideo == 1
-                        ? Align(
-                            alignment: Alignment.topLeft,
-                            child: GestureDetector(
-                              onTap: () {
-                                viewModel.setIndexFullScreenVideo(0);
-                              },
-                              child: const Padding(
-                                padding: EdgeInsets.all(8),
-                                child: Icon(Icons.close,
-                                    size: 48, color: Colors.black),
-                              ),
-                            ),
-                          )
-                        : const SizedBox(),
+                    Visibility(
+                      visible: viewModel.checkVisibilityByIndex(1) &&
+                          viewModel.isFullScreenEnabled,
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: GestureDetector(
+                          onTap: viewModel.disableFullscreenVideoMode,
+                          child: const Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Icon(Icons.close,
+                                size: 48, color: Colors.black),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

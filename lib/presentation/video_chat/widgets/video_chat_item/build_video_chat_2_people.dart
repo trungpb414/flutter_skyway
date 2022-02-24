@@ -6,8 +6,7 @@ extension BuildVideoChat2Person on VideoChatView {
       mainAxisSize: MainAxisSize.max,
       children: [
         Visibility(
-          visible: viewModel.indexFullScreenVideo == 1 ||
-              viewModel.indexFullScreenVideo == 0,
+          visible: viewModel.checkVisibilityByIndex(1),
           child: Expanded(
             flex: 1,
             child: GestureDetector(
@@ -120,8 +119,7 @@ extension BuildVideoChat2Person on VideoChatView {
           height: 4,
         ),
         Visibility(
-          visible: viewModel.indexFullScreenVideo == 2 ||
-              viewModel.indexFullScreenVideo == 0,
+          visible: viewModel.checkVisibilityByIndex(2),
           child: Expanded(
             flex: 1,
             child: GestureDetector(
@@ -208,21 +206,21 @@ extension BuildVideoChat2Person on VideoChatView {
                           ),
                         ),
                       ),
-                      viewModel.indexFullScreenVideo == 2
-                          ? Align(
-                              alignment: Alignment.topLeft,
-                              child: GestureDetector(
-                                onTap: () {
-                                  viewModel.setIndexFullScreenVideo(0);
-                                },
-                                child: const Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: Icon(Icons.close,
-                                      size: 48, color: Colors.black),
-                                ),
-                              ),
-                            )
-                          : const SizedBox(),
+                      Visibility(
+                        visible: viewModel.checkVisibilityByIndex(2) &&
+                            viewModel.isFullScreenEnabled,
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: GestureDetector(
+                            onTap: viewModel.disableFullscreenVideoMode,
+                            child: const Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Icon(Icons.close,
+                                  size: 48, color: Colors.black),
+                            ),
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),

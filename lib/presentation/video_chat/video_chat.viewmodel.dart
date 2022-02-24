@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_skyway/core/base.dart';
 import 'package:flutter_skyway/domain/entities/skyway_peer.dart';
 import 'package:flutter_skyway/presentation/app/app.pages.dart';
+import 'package:flutter_skyway/presentation/video_chat/group_chat/group_chat.viewmodel.dart';
 import 'package:flutter_skyway/presentation/video_chat/group_chat/widgets/end_call_aleartdialog.dart';
 import 'package:flutter_skyway/presentation/video_chat/group_chat/widgets/setting_bottomsheet.dart';
 import 'package:flutter_skyway/presentation/video_chat/video_chat.suc.dart';
@@ -65,7 +66,8 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
     try {
       await checkPermission();
       if (await checkPermission()) {
-        peer = await useCase.connect("b4c7675c-056e-47cb-a9ec-2a0f9f4904c2", "localhost", _onSkywayEvent);
+        peer = await useCase.connect("b4c7675c-056e-47cb-a9ec-2a0f9f4904c2",
+            "localhost", _onSkywayEvent);
       } else {}
     } on Exception catch (e) {
       Get.defaultDialog(title: "Error", middleText: e.toString());
@@ -105,7 +107,8 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   increaseNotification(String remotePeerId) async {
     notifications.add(
       IncomingPeopleNotification(
-          circleImage: Assets.images.imgAvatarPlaceHolder.image(), name: "#remotePeerId $remotePeerId"),
+          circleImage: Assets.images.imgAvatarPlaceHolder.image(),
+          name: "#remotePeerId $remotePeerId"),
     );
     await Future.delayed(
       const Duration(seconds: 5),
@@ -125,14 +128,15 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   void shareTrigger() async {
     try {
       await peer?.requestShareScreenPermission();
-      screenPeer = await useCase.connect("b4c7675c-056e-47cb-a9ec-2a0f9f4904c2", "localhost", _onShareSkywayEvent);
+      screenPeer = await useCase.connect("b4c7675c-056e-47cb-a9ec-2a0f9f4904c2",
+          "localhost", _onShareSkywayEvent);
       await screenPeer?.joinAsScreen(roomName, SkywayRoomMode.SFU);
     } on Exception catch (e) {
       print(e);
     }
   }
 
-  void _onShareSkywayEvent(SkywayEvent event, Map<dynamic, dynamic> args) { }
+  void _onShareSkywayEvent(SkywayEvent event, Map<dynamic, dynamic> args) {}
 
   Future<bool> checkPermission() async {
     var cameraStatus = await Permission.camera.status;
@@ -165,11 +169,11 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
     await peer?.join(roomName, SkywayRoomMode.SFU);
   }
 
-    void _onSkywayEvent(SkywayEvent event, Map<dynamic, dynamic> args) {
+  void _onSkywayEvent(SkywayEvent event, Map<dynamic, dynamic> args) {
     switch (event) {
       case SkywayEvent.onConnect:
         _onConnect(args['peerId']);
-      break;
+        break;
       case SkywayEvent.onDisconnect:
         _onDisconnect(args['peerId']);
         break;
@@ -241,6 +245,12 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
 
   void _onMessageData(String message) {
     print('_onMessageData:message=$message');
+    try {
+      var chatVM = Get.find<GroupChatViewModel>();
+      chatVM.onMessageReceived(message);
+    } catch (e) {
+      print(e);
+    }
   }
 
   void goToChat() {

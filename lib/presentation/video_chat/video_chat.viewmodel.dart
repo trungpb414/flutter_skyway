@@ -59,6 +59,9 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   @observable
   bool isAudioEnabled = true;
 
+  @observable
+  int indexFullScreenVideo = 0;
+
   @override
   void onInit() async {
     super.onInit();
@@ -117,6 +120,9 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
       },
     );
   }
+
+  @action
+  setIndexFullScreenVideo(int value) => indexFullScreenVideo = value;
 
   @override
   void onClose() async {

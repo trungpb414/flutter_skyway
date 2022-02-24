@@ -1,9 +1,11 @@
 package com.example.flutter_skyway;
 
 import android.app.Activity;
+import android.media.projection.MediaProjection;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 
@@ -28,6 +30,7 @@ import io.skyway.Peer.OnCallback;
 import io.skyway.Peer.Peer;
 import io.skyway.Peer.PeerError;
 import io.skyway.Peer.Room;
+import io.skyway.Peer.RoomDataMessage;
 import io.skyway.Peer.RoomOption;
 
 public class FlutterSkywayPeer {
@@ -43,7 +46,7 @@ public class FlutterSkywayPeer {
     @NonNull
     private final Activity activity;
     @NonNull
-    private final EventChannel _Eventchannel;
+    private final EventChannel _eventChannel;
     @NonNull
     private final String _peerId;
     @NonNull
@@ -61,6 +64,7 @@ public class FlutterSkywayPeer {
 
     private int _localVideoId = -1;
     private Canvas _localCanvas;
+    private MediaStream _localShareScreenStream;
 
     @NonNull
     private final Handler _handler = new Handler(Looper.getMainLooper());
@@ -76,9 +80,9 @@ public class FlutterSkywayPeer {
         this.activity = activity;
         _peerId = peerId;
         _peer = peer;
-        _Eventchannel = new EventChannel(binaryMessenger,
+        _eventChannel = new EventChannel(binaryMessenger,
                 Const.PEER_EVENT_CHANNEL_NAME + "_" + peer.identity());
-        _Eventchannel.setStreamHandler(mStreamHandler);
+        _eventChannel.setStreamHandler(mStreamHandler);
 
 
         _peer.on(Peer.PeerEventEnum.DISCONNECTED, new OnCallback() {
@@ -175,12 +179,53 @@ public class FlutterSkywayPeer {
             final RoomOption option = new RoomOption();
             option.mode = mode;
             option.stream = _localStream;
-
-
             _room = _peer.joinRoom(roomName, option);
             _roomName = roomName;
             _roomMode = mode;
             setRoomCallback(_room);
+        }
+    }
+
+    public void joinAsScreen(@NonNull final String roomName, final RoomOption.RoomModeEnum mode)
+            throws IllegalStateException {
+        if (_localShareScreenStream == null) {
+            final MediaConstraints constraints = new MediaConstraints();
+            constraints.maxWidth = 500;
+            constraints.maxHeight = 500;
+            Navigator.initialize(_peer);
+            _localShareScreenStream = Navigator.getDisplayMedia(constraints,
+                    MainActivity.Companion.getMediaProjectionPermissionResultData(),
+                    new MediaProjectionCallback());
+            _localShareScreenStream.setEnableAudioTrack(0, false);
+        }
+        if (DEBUG) Log.v(TAG, "join:" + roomName + ",mode=" + mode);
+        if (!isConnected() || (_localShareScreenStream == null)) {
+            throw new IllegalStateException("Already released or not started local stream");
+        }
+
+        if (_mediaConnection != null) {
+            _mediaConnection.close();
+        }
+        if ((_room == null) || !roomName.equals(_roomName) || !mode.equals(_roomMode)) {
+            if (_room != null) {
+                unsetRoomCallback(_room);
+                _room = null;
+            }
+            final RoomOption option = new RoomOption();
+            option.mode = mode;
+            option.stream = _localShareScreenStream;
+            // Join Room
+            _room = _peer.joinRoom(roomName, option);
+            _roomName = roomName;
+            _roomMode = mode;
+            setRoomCallback(_room);
+        }
+    }
+
+    private class MediaProjectionCallback extends MediaProjection.Callback {
+        @Override
+        public void onStop() {
+            Log.e("MediaProjection", "onStop");
         }
     }
 
@@ -276,9 +321,32 @@ public class FlutterSkywayPeer {
         }
     }
 
+    public void switchCamera() {
+        _localStream.switchCamera();
+    }
+
+    public void setEnableAudioTrack(final boolean enabled) {
+        _localStream.setEnableAudioTrack(0, enabled);
+    }
+
+    public void setEnableVideoTrack(final boolean enabled) {
+        _localStream.setEnableVideoTrack(0, enabled);
+    }
+
+    public void sendText(final String message) {
+        if (_room != null) {
+            _room.send(message);
+        }
+    }
+
     public void release() {
         if (DEBUG) Log.v(TAG, "release:");
         closeRemoteStreamAll();
+
+        if (_localShareScreenStream != null) {
+            _localShareScreenStream.close();
+            _localShareScreenStream = null;
+        }
 
         if (_localStream != null) {
             if (_localCanvas != null) {
@@ -524,6 +592,20 @@ public class FlutterSkywayPeer {
                 if (object instanceof MediaStream) {
                     final MediaStream stream = (MediaStream) object;
                     removeRemoteStream(stream.getPeerId());
+                }
+            }
+        });
+        room.on(Room.RoomEventEnum.DATA, new OnCallback() {
+            @Override
+            public void onCallback(Object object) {
+                if (DEBUG) Log.v(TAG, "RoomEventEnum.DATA:" + object);
+                if (object instanceof RoomDataMessage) {
+                    final RoomDataMessage roomData = (RoomDataMessage) object;
+                    final Map<String, String> message
+                            = createMessage(Const.SkywayEvent.onMessageData);
+                    message.put("senderPeerId", roomData.src);
+                    message.put("message", (String) roomData.data);
+                    sendMessage(message);
                 }
             }
         });

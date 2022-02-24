@@ -1,5 +1,8 @@
 package com.example.flutter_skyway
 
+import android.content.Context
+import android.content.Intent
+import android.media.projection.MediaProjectionManager
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
@@ -21,6 +24,15 @@ class MainActivity : FlutterActivity() {
     companion object {
         private const val DEBUG = true
         private val TAG = MainActivity::class.java.simpleName
+        var mediaProjectionPermissionResultCode = 0
+        var mediaProjectionPermissionResultData: Intent? = null
+        var CAPTURE_PERMISSION_REQUEST_CODE = 1
+    }
+
+    private fun getPeer(peerId: String?): FlutterSkywayPeer? {
+        synchronized(peers) {
+            return peers[peerId]
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
@@ -32,6 +44,14 @@ class MainActivity : FlutterActivity() {
         if (DEBUG) Log.v(TAG, "onDestroy:");
         releaseAll()
         super.onDestroy()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode != CAPTURE_PERMISSION_REQUEST_CODE) return
+        mediaProjectionPermissionResultCode = resultCode
+        mediaProjectionPermissionResultData = data
+        val intent = ShareService.newIntent(this, resultCode, data)
+        startService(intent)
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
@@ -80,6 +100,24 @@ class MainActivity : FlutterActivity() {
             }
             "reject" -> {
                 reject(call, result)
+            }
+            "switchCamera" -> {
+                switchCamera(call, result)
+            }
+            "requestShareScreenPermission" -> {
+                requestShareScreenPermission(call, result)
+            }
+            "joinAsScreen" -> {
+                joinAsScreen(call, result)
+            }
+            "setEnableAudioTrack" -> {
+                setEnableAudioTrack(call, result)
+            }
+            "setEnableVideoTrack" -> {
+                setEnableVideoTrack(call, result)
+            }
+            "sendText" -> {
+                sendText(call, result)
             }
             else -> {
                 Log.w(TAG, "unknown method call${call}")
@@ -275,6 +313,7 @@ class MainActivity : FlutterActivity() {
         }
     }
 
+    // TODO
     private fun accept(call: MethodCall, result: MethodChannel.Result) {
         if (DEBUG) Log.v(TAG, "accept:${call}")
         val peerId = call.argument<String>("peerId")
@@ -282,6 +321,7 @@ class MainActivity : FlutterActivity() {
         result.success("success")
     }
 
+    // TODO
     private fun reject(call: MethodCall, result: MethodChannel.Result) {
         if (DEBUG) Log.v(TAG, "reject:${call}")
         val peerId = call.argument<String>("peerId")
@@ -289,9 +329,88 @@ class MainActivity : FlutterActivity() {
         result.success("success")
     }
 
-    private fun getPeer(peerId: String?): FlutterSkywayPeer? {
-        synchronized(peers) {
-            return peers[peerId]
+    private fun joinAsScreen(call: MethodCall, result: MethodChannel.Result) {
+        if (DEBUG) Log.v(TAG, "join as screen:${call}")
+        val peerId = call.argument<String>("peerId")
+        val room = call.argument<String>("room")
+        val mode = call.argument<Int>("mode")
+        val peer = getPeer(peerId)
+        if ((peer != null) && (room != null) && (mode != null)) {
+            when (mode) {
+                RoomOption.RoomModeEnum.MESH.ordinal -> {
+                    peer.joinAsScreen(room, RoomOption.RoomModeEnum.MESH)
+                    result.success("success")
+                }
+                RoomOption.RoomModeEnum.SFU.ordinal -> {
+                    peer.joinAsScreen(room, RoomOption.RoomModeEnum.SFU)
+                    result.success("success")
+                }
+                else -> {
+                    result.error("Invalid mode(${mode})", "Invalid mode(${mode})", "")
+                }
+            }
+        } else {
+            result.error("Failed to call", "Failed to call", "")
+        }
+    }
+
+    private fun requestShareScreenPermission(call: MethodCall, result: MethodChannel.Result) {
+        val mProjectionManager = application.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+        startActivityForResult(mProjectionManager.createScreenCaptureIntent(), CAPTURE_PERMISSION_REQUEST_CODE);
+        ShareService.mListener = OnShareServiceListener() {
+            result.success("success");
+        }
+    }
+
+    private fun switchCamera(call: MethodCall, result: MethodChannel.Result) {
+        if (DEBUG) Log.v(TAG, "switchCamera:${call}")
+        val peerId = call.argument<String>("peerId")
+        val peer = getPeer(peerId)
+        if (peer != null) {
+            peer.switchCamera();
+            result.success("success")
+        } else {
+            result.error("Failed to call", "Failed to call", "")
+        }
+    }
+
+    private fun setEnableAudioTrack(call: MethodCall, result: MethodChannel.Result) {
+        if (DEBUG) Log.v(TAG, "setEnableAudioTrack:${call}")
+        val peerId = call.argument<String>("peerId")
+        val isEnabled = call.argument<Boolean>("isEnabled")
+        val peer = getPeer(peerId)
+        if ((peer != null) && (isEnabled != null)) {
+            peer.setEnableAudioTrack(isEnabled);
+            result.success("success")
+        } else {
+            result.error("Failed to call", "Failed to call", "")
+        }
+    }
+
+    private fun setEnableVideoTrack(call: MethodCall, result: MethodChannel.Result) {
+        if (DEBUG) Log.v(TAG, "setEnableVideoTrack:${call}")
+        val peerId = call.argument<String>("peerId")
+        val isEnabled = call.argument<Boolean>("isEnabled")
+        val peer = getPeer(peerId)
+        if ((peer != null) && (isEnabled != null)) {
+            peer.setEnableVideoTrack(isEnabled);
+            result.success("success")
+        } else {
+            result.error("Failed to call", "Failed to call", "")
+        }
+    }
+
+    private fun sendText(call: MethodCall, result: MethodChannel.Result) {
+        if (DEBUG) Log.v(TAG, "sendText:${call}")
+        val peerId = call.argument<String>("peerId")
+        val room = call.argument<String>("room")
+        val message = call.argument<String>("message")
+        val peer = getPeer(peerId)
+        if ((peer != null) && (room != null) && (message != null)) {
+            peer.sendText(message);
+            result.success("success")
+        } else {
+            result.error("Failed to call", "Failed to call", "")
         }
     }
 }

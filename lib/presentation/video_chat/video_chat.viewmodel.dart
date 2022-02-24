@@ -24,9 +24,6 @@ class RemotePeer {
 }
 
 abstract class _VideoChatViewModel extends BaseViewModel with Store {
-  @observable
-  int numberOfPeople = 4;
-
   ObservableList<IncomingPeopleNotification> notifications = ObservableList();
 
   VideoChatSceneUseCaseType useCase;
@@ -35,6 +32,8 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
 
   @observable
   SkywayPeer? peer;
+
+  SkywayPeer? screenPeer;
 
   @computed
   bool get isConnected => peer != null;
@@ -52,6 +51,13 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
 
   @observable
   ObservableMap<String, RemotePeer> peers = ObservableMap();
+
+  @observable
+  bool isCameraEnabled = true;
+
+  @observable
+  bool isAudioEnabled = true;
+
   @override
   void onInit() async {
     super.onInit();
@@ -59,8 +65,7 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
     try {
       await checkPermission();
       if (await checkPermission()) {
-        peer = await useCase.connect("b4c7675c-056e-47cb-a9ec-2a0f9f4904c2",
-            "localhost", _onSkywayEvent);
+        peer = await useCase.connect("b4c7675c-056e-47cb-a9ec-2a0f9f4904c2", "localhost", _onSkywayEvent);
       } else {}
     } on Exception catch (e) {
       Get.defaultDialog(title: "Error", middleText: e.toString());
@@ -68,19 +73,26 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   }
 
   @action
-  rotateCameraTrigger() {}
+  rotateCameraTrigger() {
+    peer?.switchCamera();
+  }
 
   @action
-  toggleCameraTrigger() {}
+  toggleCameraTrigger() {
+    peer?.setEnableVideoTrack(!isCameraEnabled);
+    isCameraEnabled = !isCameraEnabled;
+  }
 
   @action
-  toggleMicTrigger() {}
+  toggleMicTrigger() {
+    peer?.setEnableAudioTrack(!isAudioEnabled);
+    isAudioEnabled = !isAudioEnabled;
+  }
 
   @action
-  declineTrigger(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => EndCallDialog(
+  declineTrigger() {
+    Get.dialog(
+      EndCallDialog(
         onEndCall: () {
           peer?.disconnect();
           Get.back();
@@ -90,15 +102,13 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   }
 
   @action
-  increaseNotification() async {
-    numberOfPeople = (numberOfPeople + 1) % 4 + 1;
+  increaseNotification(String remotePeerId) async {
     notifications.add(
       IncomingPeopleNotification(
-          circleImage: Assets.images.imgAvatarPlaceHolder.image(),
-          name: "John ${notifications.length + 1}"),
+          circleImage: Assets.images.imgAvatarPlaceHolder.image(), name: "#remotePeerId $remotePeerId"),
     );
     await Future.delayed(
-      const Duration(seconds: 2),
+      const Duration(seconds: 5),
       () async {
         notifications.removeAt(0);
       },
@@ -106,10 +116,23 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   }
 
   @override
-  void onClose() {
+  void onClose() async {
     super.onClose();
-    peer?.disconnect();
+    await peer?.disconnect();
+    await screenPeer?.disconnect();
   }
+
+  void shareTrigger() async {
+    try {
+      await peer?.requestShareScreenPermission();
+      screenPeer = await useCase.connect("b4c7675c-056e-47cb-a9ec-2a0f9f4904c2", "localhost", _onShareSkywayEvent);
+      await screenPeer?.joinAsScreen(roomName, SkywayRoomMode.SFU);
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
+  void _onShareSkywayEvent(SkywayEvent event, Map<dynamic, dynamic> args) { }
 
   Future<bool> checkPermission() async {
     var cameraStatus = await Permission.camera.status;
@@ -142,11 +165,11 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
     await peer?.join(roomName, SkywayRoomMode.SFU);
   }
 
-  void _onSkywayEvent(SkywayEvent event, Map<dynamic, dynamic> args) {
+    void _onSkywayEvent(SkywayEvent event, Map<dynamic, dynamic> args) {
     switch (event) {
       case SkywayEvent.onConnect:
         _onConnect(args['peerId']);
-        break;
+      break;
       case SkywayEvent.onDisconnect:
         _onDisconnect(args['peerId']);
         break;
@@ -169,6 +192,9 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
         _onLeave(args['remotePeerId']);
         break;
       case SkywayEvent.onCall:
+        break;
+      case SkywayEvent.onMessageData:
+        _onMessageData(args['message']);
         break;
     }
   }
@@ -206,29 +232,33 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
 
   void _onJoin(String remotePeerId) {
     print('_onJoin:remotePeerId=$remotePeerId');
+    increaseNotification(remotePeerId);
   }
 
   void _onLeave(String remotePeerId) {
     print('_onLeave:remotePeerId=$remotePeerId');
   }
 
+  void _onMessageData(String message) {
+    print('_onMessageData:message=$message');
+  }
+
   void goToChat() {
     Get.toNamed(Routes.GROUP_CHAT);
   }
 
-  void showSetting(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-      builder: (BuildContext context) {
-        return SettingBottomSheet(
+  void showSetting() {
+    Get.bottomSheet(
+        SettingBottomSheet(
           onRecordSelected: () {},
-          onShareSelected: () {},
-        );
-      },
-    );
+          onShareSelected: () {
+            shareTrigger();
+          },
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        backgroundColor: Colors.white);
   }
 }
 

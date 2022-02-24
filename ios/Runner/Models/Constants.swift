@@ -26,6 +26,8 @@ enum Method: String {
     case leave
     case sendText
     case switchCamera
+    case setEnableAudioTrack
+    case setEnableVideoTrack
 }
 
 

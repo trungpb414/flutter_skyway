@@ -243,9 +243,19 @@ class FlutterSkywayPeer: NSObject {
 }
 
 extension FlutterSkywayPeer {
-    func switchCamera(_ mode: SKWCameraPositionEnum) {
+    func switchCamera() {
         guard let localStream = localStream else { return }
-        localStream.setCameraPosition(mode)
+        localStream.switchCamera()
+    }
+    
+    func setEnableVideoTrack(_ enable: Bool) {
+        guard let localStream = localStream else { return }
+        localStream.setEnableVideoTrack(0, enable: enable)
+    }
+    
+    func setEnableAudioTrack(_ enable: Bool) {
+        guard let localStream = localStream else { return }
+        localStream.setEnableAudioTrack(0, enable: enable)
     }
 }
 

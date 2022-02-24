@@ -17,7 +17,7 @@ abstract class _HomeViewModel extends BaseViewModel with Store {
   _HomeViewModel(this.useCase);
 
   @observable
-  var roomName = "1234";
+  var roomName = "";
 
   @observable
   var callMode = CallModeType.sfu;

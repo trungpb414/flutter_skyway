@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_skyway/domain/entities/skyway_peer.dart';
 import 'package:flutter_skyway/domain/entities/user.dart';
 import 'package:flutter_skyway/presentation/video_chat/group_chat/message_model.dart';
-import 'package:flutter_skyway/presentation/video_chat/group_chat/widgets/end_call_aleartdialog.dart';
-import 'package:flutter_skyway/presentation/video_chat/group_chat/widgets/setting_bottomsheet.dart';
+import 'package:flutter_skyway/presentation/video_chat/video_chat.viewmodel.dart';
 import 'package:get/instance_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
@@ -15,111 +15,26 @@ class GroupChatViewModel = _GroupChatViewModel with _$GroupChatViewModel;
 
 abstract class _GroupChatViewModel extends BaseViewModel with Store {
   @observable
-  List<User> users = [];
-
-  @observable
   List<MessageModel> messages = [];
 
   late TextEditingController messageController;
 
   final ScrollController scrollController = ScrollController();
 
+  final callTime = DateFormat('dd.MM.yyyy').format(DateTime.now());
+
+  final videoVM = Get.find<VideoChatViewModel>();
+
   @override
   void onInit() {
     super.onInit();
     messageController = TextEditingController();
-
-    users = [
-      User(
-          id: '1',
-          firstName: 'Lan',
-          lastName: 'Tran',
-          picture: Assets.images.pic1.path),
-      User(
-          id: '2',
-          firstName: 'Hoa',
-          lastName: 'Nguyen',
-          picture: Assets.images.pic2.path),
-      User(
-          id: '3',
-          firstName: 'Hue',
-          lastName: 'Vo',
-          picture: Assets.images.pic3.path),
-    ];
-
-    messages = [
-      MessageModel(
-          id: 1,
-          content: 'message message message message message message ',
-          time: DateTime.now().subtract(const Duration(minutes: 8)),
-          userSentId: 1),
-      MessageModel(
-          id: 2,
-          content: 'messagemessage message ',
-          time: DateTime.now().subtract(const Duration(minutes: 7)),
-          userSentId: 2),
-      MessageModel(
-          id: 3,
-          content: 'message message message message message ',
-          time: DateTime.now().subtract(const Duration(minutes: 6)),
-          userSentId: 2),
-      MessageModel(
-          id: 4,
-          content: 'message message ',
-          time: DateTime.now().subtract(const Duration(minutes: 5)),
-          userSentId: 3),
-      MessageModel(
-          id: 5,
-          content: 'messagemessage message message ',
-          time: DateTime.now().subtract(const Duration(minutes: 4)),
-          userSentId: 1),
-      MessageModel(
-          id: 6,
-          content: 'message message message ',
-          time: DateTime.now().subtract(const Duration(minutes: 3)),
-          userSentId: 1),
-      MessageModel(
-          id: 7,
-          content: 'message message message message message message ',
-          time: DateTime.now().subtract(const Duration(minutes: 2)),
-          userSentId: 3),
-      MessageModel(
-          id: 8,
-          content: 'message message message message message ',
-          time: DateTime.now().subtract(const Duration(minutes: 2)),
-          userSentId: 3),
-      MessageModel(
-          id: 1,
-          content: 'message message message message message message ',
-          time: DateTime.now().subtract(const Duration(minutes: 1)),
-          userSentId: 1),
-      MessageModel(
-          id: 2,
-          content: 'messagemessage message ',
-          time: DateTime.now().subtract(const Duration(minutes: 1)),
-          userSentId: 2),
-      MessageModel(
-          id: 3,
-          content: 'message message message message message ',
-          time: DateTime.now().subtract(const Duration(minutes: 1)),
-          userSentId: 2),
-      MessageModel(
-          id: 1,
-          content: 'message message message message message message ',
-          time: DateTime.now().subtract(const Duration(minutes: 1)),
-          userSentId: 1),
-      MessageModel(
-          id: 2,
-          content: 'messagemessage message ',
-          time: DateTime.now().subtract(const Duration(minutes: 1)),
-          userSentId: 2),
-      MessageModel(
-          id: 3,
-          content: 'message message message message message ',
-          time: DateTime.now().subtract(const Duration(minutes: 1)),
-          userSentId: 2),
-    ].reversed.toList();
   }
+
+  @computed
+  int get totalUsers => videoVM.users.length;
+
+  List<User> get users => videoVM.users;
 
   @override
   void dispose() {
@@ -129,15 +44,19 @@ abstract class _GroupChatViewModel extends BaseViewModel with Store {
 
   @action
   void addMessage() {
-    if (messageController.text.isNotEmpty) {
+    if (messageController.text.isNotEmpty && videoVM.peer != null) {
+      videoVM.peer!.sendText(videoVM.roomName, messageController.text);
       messages = [
         MessageModel(
           content: messageController.text,
           time: DateTime.now(),
-          userSentId: 1,
+          userSentId: videoVM.peer?.peerId ?? '',
         ),
         ...messages
       ];
+      if (videoVM.peer != null) {
+        videoVM.peer!.sendText(videoVM.roomName, messageController.text);
+      }
     }
     messageController.clear();
     scrollController.animateTo(
@@ -146,6 +65,27 @@ abstract class _GroupChatViewModel extends BaseViewModel with Store {
       duration: const Duration(milliseconds: 300),
     );
   }
+
+  @action
+  void onMessageReceived(String message, String senderId) {
+    messages = [
+      MessageModel(
+        content: message,
+        time: DateTime.now(),
+        userSentId: senderId,
+      ),
+      ...messages
+    ];
+  }
+
+  @action
+  bool checkIfIsSender(int index) =>
+      messages[index].userSentId == videoVM.peer?.peerId;
+
+  @action
+  User getUser(int index) => users
+      .where((element) => element.id == messages[index].userSentId)
+      .firstWhere((element) => true);
 
   bool hasAvatar(int index) {
     if (index == 0) {
@@ -157,23 +97,9 @@ abstract class _GroupChatViewModel extends BaseViewModel with Store {
     return false;
   }
 
-  String getCallTime() {
-    return DateFormat('dd.MM.yyyy').format(DateTime.now());
-  }
-
   void backToVideo() {
     Get.back();
   }
 
-  void showSetting() {
-    Get.bottomSheet(
-        SettingBottomSheet(
-          onRecordSelected: () {},
-          onShareSelected: () {},
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        backgroundColor: Colors.white);
-  }
+  void showSetting() {}
 }

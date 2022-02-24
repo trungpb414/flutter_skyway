@@ -10,13 +10,13 @@ import 'circle_avatar.dart';
 class SentBubleMessage extends StatelessWidget {
   const SentBubleMessage(
       {Key? key,
-      required this.isSent,
+      required this.isSender,
       required this.userModel,
       required this.messageModel,
       required this.hasAvatar})
       : super(key: key);
 
-  final bool isSent;
+  final bool isSender;
   final User userModel;
   final MessageModel messageModel;
   final bool hasAvatar;
@@ -27,10 +27,10 @@ class SentBubleMessage extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
       child: Row(
         mainAxisAlignment:
-            isSent ? MainAxisAlignment.end : MainAxisAlignment.start,
+            isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
-          messageThumbAvatar(!isSent && hasAvatar),
-          if (isSent)
+          messageThumbAvatar(!isSender && hasAvatar),
+          if (isSender)
             const SizedBox(
               width: 50,
             ),
@@ -40,8 +40,9 @@ class SentBubleMessage extends StatelessWidget {
           Flexible(
             child: DecoratedBox(
               decoration: BoxDecoration(
-                color:
-                    isSent ? const Color(0xffEFFEDD) : const Color(0xffFFFFFF),
+                color: isSender
+                    ? const Color(0xffEFFEDD)
+                    : const Color(0xffFFFFFF),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Padding(
@@ -59,7 +60,7 @@ class SentBubleMessage extends StatelessWidget {
                     Text(
                       DateFormat('hh:mm a')
                           .format(messageModel.time ?? DateTime.now()),
-                    ).defaultStyle().fontSize(12.sp).color(isSent
+                    ).defaultStyle().fontSize(12.sp).color(isSender
                         ? const Color(0xff62AC55)
                         : const Color(0xffA1AAB3)),
                   ],
@@ -67,14 +68,14 @@ class SentBubleMessage extends StatelessWidget {
               ),
             ),
           ),
-          if (!isSent)
+          if (!isSender)
             const SizedBox(
               width: 50,
             ),
           const SizedBox(
             width: 5,
           ),
-          messageThumbAvatar(isSent && hasAvatar),
+          messageThumbAvatar(isSender && hasAvatar),
         ],
       ),
     );

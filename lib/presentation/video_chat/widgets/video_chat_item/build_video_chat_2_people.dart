@@ -220,7 +220,19 @@ extension BuildVideoChat2Person on VideoChatView {
                             ),
                           ),
                         ),
-                      )
+                      ),
+                      Visibility(
+                        visible: viewModel.isLoading,
+                        child: const Align(
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: CircularProgressIndicator(
+                              value: null,
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

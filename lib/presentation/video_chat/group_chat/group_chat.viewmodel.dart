@@ -81,7 +81,7 @@ abstract class _GroupChatViewModel extends BaseViewModel with Store {
       messages[index].userSentId == videoVM.peer?.peerId;
 
   @action
-  User getUser(int index) => users
+  User getUser(int index) => videoVM.users
       .where((element) => element.id == messages[index].userSentId)
       .firstWhere((element) => true);
 

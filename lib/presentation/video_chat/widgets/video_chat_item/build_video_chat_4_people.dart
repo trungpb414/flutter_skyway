@@ -35,6 +35,7 @@ extension BuildVideoChat4People on VideoChatView {
                     .image(width: 84, height: 84, fit: BoxFit.cover),
               ),
               _buildItemVideoChat(
+                isLoading: viewModel.isLoading,
                 name: "You",
                 backgroundImage: Assets.images.imgAvatarPlaceHolder2
                     .image(fit: BoxFit.cover),
@@ -49,7 +50,8 @@ extension BuildVideoChat4People on VideoChatView {
   }
 
   Widget _buildItemVideoChat(
-      {required String name,
+      {bool isLoading = false,
+      required String name,
       required Image backgroundImage,
       required Image circleImage}) {
     return Expanded(
@@ -113,13 +115,18 @@ extension BuildVideoChat4People on VideoChatView {
                 child: Assets.images.icDots.svg(height: 24, width: 24),
               ),
             ),
-            // const Align(
-            //   alignment: Alignment.center,
-            //   child: CircularProgressIndicator(
-            //     color: Colors.white,
-            //     strokeWidth: 2,
-            //   ),
-            // ),
+            Visibility(
+              visible: isLoading,
+              child: const Align(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: EdgeInsets.all(8),
+                  child: CircularProgressIndicator(
+                    value: null,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

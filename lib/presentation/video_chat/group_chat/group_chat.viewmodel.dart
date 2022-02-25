@@ -43,7 +43,6 @@ abstract class _GroupChatViewModel extends BaseViewModel with Store {
   @action
   void addMessage() {
     if (messageController.text.isNotEmpty && videoVM.peer != null) {
-      videoVM.peer!.sendText(videoVM.roomName, messageController.text);
       messages = [
         MessageModel(
           content: messageController.text,
@@ -81,9 +80,8 @@ abstract class _GroupChatViewModel extends BaseViewModel with Store {
       messages[index].userSentId == videoVM.peer?.peerId;
 
   @action
-  User getUser(int index) => users
-      .where((element) => element.id == messages[index].userSentId)
-      .firstWhere((element) => true);
+  User getUser(int index) => videoVM.users
+      .firstWhere((element) => element.id == messages[index].userSentId);
 
   bool hasAvatar(int index) {
     if (index == 0) {

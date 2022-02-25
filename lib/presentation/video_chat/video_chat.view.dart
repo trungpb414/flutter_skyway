@@ -167,7 +167,7 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
         if (viewModel.isConnected) {
           switch (viewModel.totalRemotePeer) {
             case 3:
-              return _buildVideoChat4People();
+              return buildVideoChat4People();
             case 2:
               return buildVideoChat3People();
             case 1:

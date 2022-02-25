@@ -1,7 +1,7 @@
 part of '../../video_chat.view.dart';
 
 extension BuildVideoChat4People on VideoChatView {
-  Widget _buildVideoChat4People() {
+  Widget buildVideoChat4People() {
     return Column(
       children: [
         Expanded(

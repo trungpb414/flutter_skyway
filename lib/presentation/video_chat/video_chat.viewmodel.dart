@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_skyway/core/base.dart';
 import 'package:flutter_skyway/domain/entities/skyway_peer.dart';
+import 'package:flutter_skyway/domain/entities/user.dart';
 import 'package:flutter_skyway/presentation/app/app.pages.dart';
 import 'package:flutter_skyway/presentation/video_chat/group_chat/group_chat.viewmodel.dart';
 import 'package:flutter_skyway/presentation/video_chat/group_chat/widgets/end_call_aleartdialog.dart';
@@ -35,6 +36,9 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   SkywayPeer? peer;
 
   SkywayPeer? screenPeer;
+
+  @observable
+  List<User> users = [];
 
   @computed
   bool get isConnected => peer != null;
@@ -74,6 +78,13 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
       if (await checkPermission()) {
         peer = await useCase.connect("b4c7675c-056e-47cb-a9ec-2a0f9f4904c2",
             "localhost", _onSkywayEvent);
+        users = [
+          User(
+              id: peer?.peerId ?? '',
+              firstName: '',
+              lastName: '',
+              picture: Assets.images.pic1.path),
+        ];
       } else {}
     } on Exception catch (e) {
       Get.defaultDialog(title: "Error", middleText: e.toString());
@@ -223,7 +234,7 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
       case SkywayEvent.onCall:
         break;
       case SkywayEvent.onMessageData:
-        _onMessageData(args['message']);
+        _onMessageData(args['message'], args['senderPeerId']);
         break;
     }
   }
@@ -241,11 +252,21 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   void _onAddRemoteStream(String remotePeerId) {
     print('_onAddRemoteStream:remotePeerId=$remotePeerId');
     peers[remotePeerId] = RemotePeer();
+    var temp = users;
+    temp.add(User(
+        id: remotePeerId,
+        firstName: '',
+        lastName: '',
+        picture: Assets.images.pic1.path));
+    users = temp;
   }
 
   void _onRemoveRemoteStream(String remotePeerId) {
     print('_onRemoveRemoteStream:remotePeerId=$remotePeerId');
     peers.remove(remotePeerId);
+    var temp = users;
+    temp.removeWhere((element) => element.id == remotePeerId);
+    users = temp;
   }
 
   void _onOpenRoom(String room) {
@@ -268,11 +289,11 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
     print('_onLeave:remotePeerId=$remotePeerId');
   }
 
-  void _onMessageData(String message) {
+  void _onMessageData(String message, String senderPeerId) {
     print('_onMessageData:message=$message');
     try {
       var chatVM = Get.find<GroupChatViewModel>();
-      chatVM.onMessageReceived(message);
+      chatVM.onMessageReceived(message, senderPeerId);
     } catch (e) {
       print(e);
     }

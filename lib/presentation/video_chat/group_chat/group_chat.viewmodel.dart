@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_skyway/domain/entities/skyway_peer.dart';
 import 'package:flutter_skyway/domain/entities/user.dart';
 import 'package:flutter_skyway/presentation/video_chat/group_chat/message_model.dart';
-import 'package:flutter_skyway/presentation/video_chat/group_chat/widgets/end_call_aleartdialog.dart';
-import 'package:flutter_skyway/presentation/video_chat/group_chat/widgets/setting_bottomsheet.dart';
 import 'package:flutter_skyway/presentation/video_chat/video_chat.viewmodel.dart';
-import 'package:flutter_skyway/utils/constants.dart';
 import 'package:get/instance_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
@@ -17,9 +14,6 @@ part 'group_chat.viewmodel.g.dart';
 class GroupChatViewModel = _GroupChatViewModel with _$GroupChatViewModel;
 
 abstract class _GroupChatViewModel extends BaseViewModel with Store {
-  @observable
-  List<User> users = [];
-
   @observable
   List<MessageModel> messages = [];
 
@@ -35,25 +29,10 @@ abstract class _GroupChatViewModel extends BaseViewModel with Store {
   void onInit() {
     super.onInit();
     messageController = TextEditingController();
-
-    users = [
-      User(
-          id: '1',
-          firstName: 'Lan',
-          lastName: 'Tran',
-          picture: Assets.images.pic1.path),
-      User(
-          id: '2',
-          firstName: 'Hoa',
-          lastName: 'Nguyen',
-          picture: Assets.images.pic2.path),
-      User(
-          id: '3',
-          firstName: 'Hue',
-          lastName: 'Vo',
-          picture: Assets.images.pic3.path),
-    ];
   }
+
+  @computed
+  int get totalUsers => videoVM.users.length;
 
   @override
   void dispose() {
@@ -63,12 +42,13 @@ abstract class _GroupChatViewModel extends BaseViewModel with Store {
 
   @action
   void addMessage() {
-    if (messageController.text.isNotEmpty) {
+    if (messageController.text.isNotEmpty && videoVM.peer != null) {
+      videoVM.peer!.sendText(videoVM.roomName, messageController.text);
       messages = [
         MessageModel(
           content: messageController.text,
           time: DateTime.now(),
-          userSentId: 1,
+          userSentId: videoVM.peer?.peerId ?? '',
         ),
         ...messages
       ];
@@ -85,16 +65,25 @@ abstract class _GroupChatViewModel extends BaseViewModel with Store {
   }
 
   @action
-  void onMessageReceived(String text) {
+  void onMessageReceived(String message, String senderId) {
     messages = [
       MessageModel(
-        content: text,
+        content: message,
         time: DateTime.now(),
-        userSentId: 2,
+        userSentId: senderId,
       ),
       ...messages
     ];
   }
+
+  @action
+  bool checkIfIsSender(int index) =>
+      messages[index].userSentId == videoVM.peer?.peerId;
+
+  @action
+  User getUser(int index) => users
+      .where((element) => element.id == messages[index].userSentId)
+      .firstWhere((element) => true);
 
   bool hasAvatar(int index) {
     if (index == 0) {
@@ -110,15 +99,5 @@ abstract class _GroupChatViewModel extends BaseViewModel with Store {
     Get.back();
   }
 
-  void showSetting() {
-    Get.bottomSheet(
-        SettingBottomSheet(
-          onRecordSelected: () {},
-          onShareSelected: () {},
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        backgroundColor: Colors.white);
-  }
+  void showSetting() {}
 }

@@ -6,6 +6,7 @@
 //
 import SkyWay
 import Then
+import AVFoundation
 
 class FlutterSkywayPeer: NSObject {
     let peerId: String
@@ -203,7 +204,8 @@ class FlutterSkywayPeer: NSObject {
             localStream?.setEnableAudioTrack(0, enable: true)
             self.localStream = localStream
         }
-        
+        // FIXME
+        turnOnSpeaker()
     }
     
     func startCall(_ id: String) {
@@ -239,6 +241,8 @@ class FlutterSkywayPeer: NSObject {
             mediaConnection.close()
             self.mediaConnection = nil
         }
+        // FIXME
+        turnOffSpeaker()
     }
 }
 
@@ -256,6 +260,17 @@ extension FlutterSkywayPeer {
     func setEnableAudioTrack(_ enable: Bool) {
         guard let localStream = localStream else { return }
         localStream.setEnableAudioTrack(0, enable: enable)
+    }
+    
+    func turnOnSpeaker() {
+        try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playAndRecord)
+        try? AVAudioSession.sharedInstance().setActive(true)
+        try? AVAudioSession.sharedInstance().overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
+        
+    }
+    
+    func turnOffSpeaker() {
+        try? AVAudioSession.sharedInstance().setActive(false)
     }
 }
 

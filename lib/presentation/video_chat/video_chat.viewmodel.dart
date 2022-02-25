@@ -251,6 +251,7 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   void _onConnect(String peerId) {
     print('_onConnect:peerId=$peerId');
     showLoading();
+    // print("debug: _onConnect + isLoading: $isLoading");
   }
 
   void _onDisconnect(String peerId) {
@@ -283,6 +284,7 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
     print('_onOpenRoom:room=$room');
     isJoined = true;
     hideLoading();
+    // print("debug: _onOpenRoom + isLoading: $isLoading");
   }
 
   void _onCloseRoom(String room) {

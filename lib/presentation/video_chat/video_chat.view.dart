@@ -9,9 +9,13 @@ import 'package:flutter_skyway/presentation/video_chat/video_chat.viewmodel.dart
 import 'package:flutter_skyway/presentation/video_chat/widgets/skyway_canvas_view.dart';
 
 part 'widgets/video_view.dart';
+
 part 'widgets/video_chat_item/build_video_chat_1_person.dart';
+
 part 'widgets/video_chat_item/build_video_chat_2_people.dart';
+
 part 'widgets/video_chat_item/build_video_chat_3_people.dart';
+
 part 'widgets/video_chat_item/build_video_chat_4_people.dart';
 
 class VideoChatView extends BaseView<VideoChatViewModel> {

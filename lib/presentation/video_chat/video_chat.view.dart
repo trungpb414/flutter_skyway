@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -56,25 +57,25 @@ class VideoChatView extends BaseView<VideoChatViewModel> {
                                 child: Assets.images.icCircleBtnChat
                                     .svg(height: 44, width: 44),
                               ),
-                              Positioned(
-                                top: -4,
-                                left: 27,
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  decoration: const BoxDecoration(
-                                      color: Colors.red,
-                                      shape: BoxShape.circle),
-                                  height: 24,
-                                  width: 24,
-                                  child: const Text(
-                                    "1",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontStyle: FontStyle.normal,
-                                        fontSize: 13),
-                                  ),
-                                ),
-                              )
+                              // Positioned(
+                              //   top: -4,
+                              //   left: 27,
+                              //   child: Container(
+                              //     alignment: Alignment.center,
+                              //     decoration: const BoxDecoration(
+                              //         color: Colors.red,
+                              //         shape: BoxShape.circle),
+                              //     height: 24,
+                              //     width: 24,
+                              //     child: const Text(
+                              //       "1",
+                              //       style: TextStyle(
+                              //           color: Colors.white,
+                              //           fontStyle: FontStyle.normal,
+                              //           fontSize: 13),
+                              //     ),
+                              //   ),
+                              // )
                             ],
                           ),
                         ),

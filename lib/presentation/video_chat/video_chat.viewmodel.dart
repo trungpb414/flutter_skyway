@@ -147,6 +147,7 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   setIndexFullScreenVideo(int value) {
     indexFullScreenVideo = value;
     isFullScreenEnabled = true;
+    print((!checkVisibilityByIndex(1) || !isFullScreenEnabled));
   }
 
   @action

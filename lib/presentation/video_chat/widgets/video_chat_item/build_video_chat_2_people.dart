@@ -93,21 +93,23 @@ extension BuildVideoChat2Person on VideoChatView {
                           ),
                         ),
                       ),
-                      viewModel.indexFullScreenVideo == 1
-                          ? Align(
-                              alignment: Alignment.topLeft,
-                              child: GestureDetector(
-                                onTap: () {
-                                  viewModel.setIndexFullScreenVideo(0);
-                                },
-                                child: const Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: Icon(Icons.close,
-                                      size: 48, color: Colors.black),
-                                ),
-                              ),
-                            )
-                          : const SizedBox(),
+                      Visibility(
+                        visible: viewModel.checkVisibilityByIndex(1) &&
+                            viewModel.isFullScreenEnabled,
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: GestureDetector(
+                            onTap: () {
+                              viewModel.disableFullscreenVideoMode();
+                            },
+                            child: const Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Icon(Icons.close,
+                                  size: 48, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -182,7 +184,7 @@ extension BuildVideoChat2Person on VideoChatView {
                         alignment: Alignment.bottomCenter,
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 16),
-                          child: const Text("You")
+                          child: const Text("User 1")
                               .defaultStyle()
                               .fontSize(14)
                               .fontWeight(FontWeight.w500)
@@ -216,7 +218,7 @@ extension BuildVideoChat2Person on VideoChatView {
                             child: const Padding(
                               padding: EdgeInsets.all(8),
                               child: Icon(Icons.close,
-                                  size: 48, color: Colors.black),
+                                  size: 48, color: Colors.white),
                             ),
                           ),
                         ),

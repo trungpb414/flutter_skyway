@@ -36,14 +36,12 @@ extension BuildVideoChat3People on VideoChatView {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 4, horizontal: 8),
+                                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                                 alignment: Alignment.center,
                                 height: 24,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12),
-                                  color:
-                                      const Color(0xFFD4D4D4).withOpacity(0.2),
+                                  color: const Color(0xFFD4D4D4).withOpacity(0.2),
                                 ),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
@@ -56,8 +54,7 @@ extension BuildVideoChat3People on VideoChatView {
                                     const SizedBox(
                                       width: 4,
                                     ),
-                                    Assets.images.icLock
-                                        .svg(height: 16, width: 16)
+                                    Assets.images.icLock.svg(height: 16, width: 16)
                                   ],
                                 ),
                               ),
@@ -88,22 +85,19 @@ extension BuildVideoChat3People on VideoChatView {
                               shape: BoxShape.circle,
                               color: const Color(0xFFD4D4D4).withOpacity(0.2),
                             ),
-                            child:
-                                Assets.images.icMask.svg(width: 20, height: 20),
+                            child: Assets.images.icMask.svg(width: 20, height: 20),
                           ),
                         ),
                       ),
                       Visibility(
-                        visible: viewModel.checkVisibilityByIndex(1) &&
-                            viewModel.isFullScreenEnabled,
+                        visible: viewModel.checkVisibilityByIndex(1) && viewModel.isFullScreenEnabled,
                         child: Align(
                           alignment: Alignment.topLeft,
                           child: GestureDetector(
                             onTap: viewModel.disableFullscreenVideoMode,
                             child: const Padding(
                               padding: EdgeInsets.all(8),
-                              child: Icon(Icons.close,
-                                  size: 48, color: Colors.white),
+                              child: Icon(Icons.close, size: 48, color: Colors.white),
                             ),
                           ),
                         ),
@@ -119,8 +113,7 @@ extension BuildVideoChat3People on VideoChatView {
           height: 4,
         ),
         Visibility(
-          visible: !viewModel.checkVisibilityByIndex(1) ||
-              !viewModel.isFullScreenEnabled,
+          visible: !viewModel.checkVisibilityByIndex(1) || !viewModel.isFullScreenEnabled,
           child: Expanded(
             flex: 1,
             child: GestureDetector(
@@ -140,8 +133,7 @@ extension BuildVideoChat3People on VideoChatView {
                             flex: 1,
                             child: SizedBox(
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4),
+                                padding: const EdgeInsets.symmetric(horizontal: 4),
                                 child: Stack(
                                   fit: StackFit.expand,
                                   children: [
@@ -151,14 +143,11 @@ extension BuildVideoChat3People on VideoChatView {
                                         borderRadius: BorderRadius.circular(12),
                                         border: Border.all(
                                           width: 2,
-                                          color: const Color(0xFF71E079),
                                         ),
                                       ),
                                       child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          child: _createRemoteView(
-                                              viewModel.peers.keys.first)),
+                                          borderRadius: BorderRadius.circular(12),
+                                          child: _createRemoteView(viewModel.peers.keys.first)),
                                     ),
                                     Container(
                                       color: Colors.black.withOpacity(0.6),
@@ -170,15 +159,13 @@ extension BuildVideoChat3People on VideoChatView {
                                           top: 12,
                                           right: 8,
                                         ),
-                                        child: Assets.images.icDots
-                                            .svg(height: 24, width: 24),
+                                        child: Assets.images.icDots.svg(height: 24, width: 24),
                                       ),
                                     ),
                                     Align(
                                       alignment: Alignment.bottomCenter,
                                       child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 12),
+                                        padding: const EdgeInsets.only(bottom: 12),
                                         child: const Text("User 1")
                                             .defaultStyle()
                                             .fontSize(14)
@@ -187,18 +174,14 @@ extension BuildVideoChat3People on VideoChatView {
                                       ),
                                     ),
                                     Visibility(
-                                      visible:
-                                          viewModel.checkVisibilityByIndex(2) &&
-                                              viewModel.isFullScreenEnabled,
+                                      visible: viewModel.checkVisibilityByIndex(2) && viewModel.isFullScreenEnabled,
                                       child: Align(
                                         alignment: Alignment.topLeft,
                                         child: GestureDetector(
-                                          onTap: viewModel
-                                              .disableFullscreenVideoMode,
+                                          onTap: viewModel.disableFullscreenVideoMode,
                                           child: const Padding(
                                             padding: EdgeInsets.all(8),
-                                            child: Icon(Icons.close,
-                                                size: 48, color: Colors.white),
+                                            child: Icon(Icons.close, size: 48, color: Colors.white),
                                           ),
                                         ),
                                       ),
@@ -219,16 +202,13 @@ extension BuildVideoChat3People on VideoChatView {
                               },
                               child: SizedBox(
                                 child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 4),
+                                  padding: const EdgeInsets.symmetric(horizontal: 4),
                                   child: Stack(
                                     fit: StackFit.expand,
                                     children: [
                                       ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          child: _createRemoteView(
-                                              viewModel.peers.keys.last)),
+                                          borderRadius: BorderRadius.circular(12),
+                                          child: _createRemoteView(viewModel.peers.keys.last)),
                                       Container(
                                         color: Colors.black.withOpacity(0.6),
                                       ),
@@ -239,18 +219,15 @@ extension BuildVideoChat3People on VideoChatView {
                                             top: 12,
                                             right: 8,
                                           ),
-                                          child: Assets.images.icDots
-                                              .svg(height: 24, width: 24),
+                                          child: Assets.images.icDots.svg(height: 24, width: 24),
                                         ),
                                       ),
                                       Align(
                                         alignment: Alignment.bottomCenter,
                                         child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 12),
+                                          padding: const EdgeInsets.only(bottom: 12),
                                           child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
                                               const Text("User 2")
                                                   .defaultStyle()
@@ -260,8 +237,7 @@ extension BuildVideoChat3People on VideoChatView {
                                               const SizedBox(
                                                 width: 6,
                                               ),
-                                              Assets.images.icMicUnmute
-                                                  .svg(height: 16, width: 16),
+                                              Assets.images.icMicUnmute.svg(height: 16, width: 16),
                                             ],
                                           ),
                                         ),
@@ -279,19 +255,14 @@ extension BuildVideoChat3People on VideoChatView {
                                         ),
                                       ),
                                       Visibility(
-                                        visible: viewModel
-                                                .checkVisibilityByIndex(3) &&
-                                            viewModel.isFullScreenEnabled,
+                                        visible: viewModel.checkVisibilityByIndex(3) && viewModel.isFullScreenEnabled,
                                         child: Align(
                                           alignment: Alignment.topLeft,
                                           child: GestureDetector(
-                                            onTap: viewModel
-                                                .disableFullscreenVideoMode,
+                                            onTap: viewModel.disableFullscreenVideoMode,
                                             child: const Padding(
                                               padding: EdgeInsets.all(8),
-                                              child: Icon(Icons.close,
-                                                  size: 48,
-                                                  color: Colors.white),
+                                              child: Icon(Icons.close, size: 48, color: Colors.white),
                                             ),
                                           ),
                                         ),

@@ -44,22 +44,27 @@ public final class ShareService extends Service {
         return intent;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public void onCreate() {
-        Notification notification =
-                new Notification.Builder(this)
-                        .setContentTitle("Screen Recorder")
-                        .setChannelId("SkywayShare")
-                        .setContentText("Your screen is being shared")
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .build();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Notification notification =
+                    new Notification.Builder(this)
+                            .setContentTitle("Screen Recorder")
+                            .setChannelId("SkywayShare")
+                            .setContentText("Your screen is being shared")
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .build();
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        NotificationChannel channel = new NotificationChannel("SkywayShare","ShareChannel", NotificationManager.IMPORTANCE_LOW);
-        channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-        notificationManager.createNotificationChannel(channel);
-        startForeground(1, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            NotificationChannel channel = new NotificationChannel("SkywayShare", "ShareChannel", NotificationManager.IMPORTANCE_LOW);
+            channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+            notificationManager.createNotificationChannel(channel);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                startForeground(1, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION);
+            }
+        } else {
+            mListener.onStartSharing();
+        }
         Toast.makeText(this, "Start Foreground", Toast.LENGTH_SHORT).show();
     }
 

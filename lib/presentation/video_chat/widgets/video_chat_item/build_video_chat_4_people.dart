@@ -39,7 +39,9 @@ extension BuildVideoChat4People on VideoChatView {
   }
 
   Widget _buildItemVideoChat(
-      {required String name, required Widget uiVideoChatView}) {
+      {
+        bool isLoading = false,
+        required String name, required Widget uiVideoChatView}) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(4),
@@ -85,6 +87,18 @@ extension BuildVideoChat4People on VideoChatView {
                   right: 8,
                 ),
                 child: Assets.images.icDots.svg(height: 24, width: 24),
+              ),
+            ),
+            Visibility(
+              visible: isLoading,
+              child: const Align(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: EdgeInsets.all(8),
+                  child: CircularProgressIndicator(
+                    value: null,
+                  ),
+                ),
               ),
             ),
           ],

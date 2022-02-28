@@ -69,6 +69,9 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   @observable
   bool isFullScreenEnabled = false;
 
+  @observable
+  bool isLoading = false;
+
   @override
   void onInit() async {
     super.onInit();
@@ -151,6 +154,12 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
     indexFullScreenVideo = 0;
     isFullScreenEnabled = false;
   }
+
+  @action
+  showLoading() => isLoading = true;
+
+  @action
+  hideLoading() => isLoading = false;
 
   @override
   void onClose() async {
@@ -241,6 +250,8 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
 
   void _onConnect(String peerId) {
     print('_onConnect:peerId=$peerId');
+    showLoading();
+    // print("debug: _onConnect + isLoading: $isLoading");
   }
 
   void _onDisconnect(String peerId) {
@@ -272,6 +283,8 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   void _onOpenRoom(String room) {
     print('_onOpenRoom:room=$room');
     isJoined = true;
+    hideLoading();
+    // print("debug: _onOpenRoom + isLoading: $isLoading");
   }
 
   void _onCloseRoom(String room) {
@@ -283,6 +296,10 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   void _onJoin(String remotePeerId) {
     print('_onJoin:remotePeerId=$remotePeerId');
     increaseNotification(remotePeerId);
+    showLoading();
+    Future.delayed(const Duration(seconds: 3), () {
+      hideLoading();
+    });
   }
 
   void _onLeave(String remotePeerId) {

@@ -101,7 +101,7 @@ extension BuildVideoChat1Person on VideoChatView {
                           child: const Padding(
                             padding: EdgeInsets.all(8),
                             child: Icon(Icons.close,
-                                size: 48, color: Colors.black),
+                                size: 48, color: Colors.white),
                           ),
                         ),
                       ),

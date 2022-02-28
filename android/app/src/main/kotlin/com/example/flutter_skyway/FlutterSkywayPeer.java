@@ -192,13 +192,15 @@ public class FlutterSkywayPeer {
             final MediaConstraints constraints = new MediaConstraints();
             constraints.maxWidth = 500;
             constraints.maxHeight = 500;
+            Navigator.terminate();
             Navigator.initialize(_peer);
             _localShareScreenStream = Navigator.getDisplayMedia(constraints,
                     MainActivity.Companion.getMediaProjectionPermissionResultData(),
                     new MediaProjectionCallback());
+            _localShareScreenStream.setEnableVideoTrack(0, true);
             _localShareScreenStream.setEnableAudioTrack(0, false);
         }
-        if (DEBUG) Log.v(TAG, "join:" + roomName + ",mode=" + mode);
+        if (DEBUG) Log.v(TAG, "joinAsScreen:" + roomName + ",mode=" + mode);
         if (!isConnected() || (_localShareScreenStream == null)) {
             throw new IllegalStateException("Already released or not started local stream");
         }
@@ -214,11 +216,9 @@ public class FlutterSkywayPeer {
             final RoomOption option = new RoomOption();
             option.mode = mode;
             option.stream = _localShareScreenStream;
-            // Join Room
             _room = _peer.joinRoom(roomName, option);
             _roomName = roomName;
             _roomMode = mode;
-            setRoomCallback(_room);
         }
     }
 
@@ -283,10 +283,9 @@ public class FlutterSkywayPeer {
             }
             if (_localStream == null) {
                 final MediaConstraints constraints = new MediaConstraints();
-                constraints.maxWidth = 100;
-                constraints.maxHeight = 100;
+                constraints.maxWidth = 500;
+                constraints.maxHeight = 500;
                 constraints.cameraPosition = MediaConstraints.CameraPositionEnum.FRONT;
-
                 Navigator.initialize(_peer);
                 _localStream = Navigator.getUserMedia(constraints);
             }

@@ -79,14 +79,9 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
     try {
       await checkPermission();
       if (await checkPermission()) {
-        peer = await useCase.connect("b4c7675c-056e-47cb-a9ec-2a0f9f4904c2",
-            "localhost", _onSkywayEvent);
+        peer = await useCase.connect("b4c7675c-056e-47cb-a9ec-2a0f9f4904c2", "localhost", _onSkywayEvent);
         users = [
-          User(
-              id: peer?.peerId ?? '',
-              firstName: '',
-              lastName: '',
-              picture: Assets.images.pic1.path),
+          User(id: peer?.peerId ?? '', firstName: '', lastName: '', picture: Assets.images.pic1.path),
         ];
       } else {}
     } on Exception catch (e) {
@@ -115,8 +110,9 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   declineTrigger() {
     Get.dialog(
       EndCallDialog(
-        onEndCall: () {
-          peer?.disconnect();
+        onEndCall: () async {
+          await peer?.disconnect();
+          await screenPeer?.disconnect();
           Get.back();
         },
       ),
@@ -127,8 +123,7 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   increaseNotification(String remotePeerId) async {
     notifications.add(
       IncomingPeopleNotification(
-          circleImage: Assets.images.imgAvatarPlaceHolder.image(),
-          name: "#remotePeerId $remotePeerId"),
+          circleImage: Assets.images.imgAvatarPlaceHolder.image(), name: "#remotePeerId $remotePeerId"),
     );
     await Future.delayed(
       const Duration(seconds: 5),
@@ -147,7 +142,6 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   setIndexFullScreenVideo(int value) {
     indexFullScreenVideo = value;
     isFullScreenEnabled = true;
-    print((!checkVisibilityByIndex(1) || !isFullScreenEnabled));
   }
 
   @action
@@ -172,8 +166,7 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
   void shareTrigger() async {
     try {
       await peer?.requestShareScreenPermission();
-      screenPeer = await useCase.connect("b4c7675c-056e-47cb-a9ec-2a0f9f4904c2",
-          "localhost", _onShareSkywayEvent);
+      screenPeer = await useCase.connect("b4c7675c-056e-47cb-a9ec-2a0f9f4904c2", "localhost", _onShareSkywayEvent);
       await screenPeer?.joinAsScreen(roomName, SkywayRoomMode.SFU);
     } on Exception catch (e) {
       print(e);
@@ -265,11 +258,7 @@ abstract class _VideoChatViewModel extends BaseViewModel with Store {
     print('_onAddRemoteStream:remotePeerId=$remotePeerId');
     peers[remotePeerId] = RemotePeer();
     var temp = users;
-    temp.add(User(
-        id: remotePeerId,
-        firstName: '',
-        lastName: '',
-        picture: Assets.images.pic1.path));
+    temp.add(User(id: remotePeerId, firstName: '', lastName: '', picture: Assets.images.pic1.path));
     users = temp;
   }
 
